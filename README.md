@@ -1,84 +1,74 @@
-# Amine Lahbib - Portfolio
+# Amine Lahbib | Full Stack Engineer
 
-A modern, responsive portfolio website showcasing my full-stack development projects, built with React and TypeScript.
+A modern, minimalist portfolio showcasing production-grade software systems built with microservices architecture, cloud-native deployment, and modern development practices.
 
-## 🚀 Featured Projects
+**🌐 Live Site: [aminelahbib-devfolio.vercel.app](https://aminelahbib-devfolio.vercel.app)**
 
-- **Cloud Secrets Manager** - Enterprise microservices platform with Kubernetes (Java, Spring Boot, React)
-- **Supreme Bus** - Distributed booking system with 4 microservices (Java, Spring Boot, Docker Compose)
-- **Real-time AI TTS System** - High-performance Rust application with sub-millisecond latency
-- **Equipment Management System** - Cloud-native application with Kubernetes orchestration
+---
 
-## Getting Started
+## About
 
-### Installation
+I design and build production systems with microservices architecture, cloud-native deployment, and modern development practices. This portfolio demonstrates my expertise across the full stack, from frontend interfaces to distributed backend systems.
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd devfolio
+## Featured Projects
+
+### Cloud Secrets Manager
+Enterprise-grade secrets management platform with 3-tier microservices architecture, complete observability stack, and security-first design.
+- **Stack:** Java 21, Spring Boot 3.3, React, PostgreSQL, Redis
+- **Infrastructure:** Kubernetes (GKE), Terraform, Helm, Google Pub/Sub
+- **Highlights:** 80%+ test coverage, AES-256-GCM encryption, TOTP-based 2FA
+
+### Supreme Bus
+Distributed bus booking platform with database-per-service pattern and distributed transaction handling.
+- **Stack:** Java, Spring Boot, PostgreSQL, Docker Compose
+- **Architecture:** 4 independent microservices with event-driven communication
+- **Highlights:** Saga pattern for distributed transactions, API Gateway
+
+### Real-time AI TTS System
+High-performance text-to-speech system built with Rust achieving sub-millisecond latency.
+- **Stack:** Rust, WebSocket, Hybrid Cloud Deployment
+- **Highlights:** WebSocket streaming, sub-ms latency, scalable architecture
+
+### Equipment Management System
+Cloud-native application with Kubernetes orchestration and GitOps deployment.
+- **Stack:** React, Node.js, MongoDB, Kubernetes
+- **Infrastructure:** ArgoCD, Helm Charts, CI/CD pipelines
+
+## Tech Stack
+
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | React, TypeScript, Tailwind CSS, Framer Motion |
+| **Backend** | Java, Spring Boot, Rust, Node.js |
+| **Infrastructure** | Kubernetes, Docker, Terraform, Helm |
+| **Data** | PostgreSQL, Redis, MongoDB, MySQL |
+| **Cloud** | GCP, AWS, Vercel |
+
+## Deployment
+
+This portfolio is deployed on [Vercel](https://vercel.com) with automatic deployments on push to `main`.
+
 ```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Create a `.env.local` file (optional, if using Gemini API):
-```env
-GEMINI_API_KEY=your_api_key_here
-```
-
-4. Start the development server:
-```bash
-npm run dev
-```
-
-The app will be available at `http://localhost:3000`
-
-### Build for Production
-
-```bash
-npm run build
-```
-
-Preview the production build:
-```bash
-npm run preview
-```
-
-## Docker Deployment
-
-### Using Docker
-
-```bash
-# Build the image
-docker build -t devfolio:latest .
-
-# Run the container
-docker run -d -p 80:80 --name devfolio-app devfolio:latest
-```
-
-### Using Docker Compose
-
-```bash
-docker-compose up -d
-```
-
-For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 ## Project Structure
 
 ```
 devfolio/
-├── components/      # Reusable React components
-├── pages/          # Page components
-├── services/       # API and data services
-├── types.ts        # TypeScript type definitions
-├── App.tsx         # Main application component
-└── index.tsx       # Application entry point
+├── components/     # Reusable UI components
+├── pages/          # Page components (Home, Projects, Contact)
+├── services/       # API services and data
+├── public/         # Static assets
+├── App.tsx         # Main application
+└── index.tsx       # Entry point
 ```
 
-## License
+## Contact
 
-This project is private and proprietary.
+- **Email:** amine.lhb00@gmail.com
+- **GitHub:** [github.com/aminlahbib](https://github.com/aminlahbib)
+- **LinkedIn:** [linkedin.com/in/aminlahbib](https://linkedin.com/in/aminlahbib)
+- **Location:** Zweibrücken, Germany
+
+---
+
+Built with React, TypeScript, and Tailwind CSS. Deployed on Vercel.
