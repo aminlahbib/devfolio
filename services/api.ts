@@ -48,8 +48,7 @@ export const projectService = {
 };
 
 // Web3Forms configuration
-// Get your access key at: https://web3forms.com/
-const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE'; // <-- Replace with your actual key
+const WEB3FORMS_ACCESS_KEY = '411d4725-d2df-49c4-bbea-3b919225605f';
 const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
 const CONTACT_EMAIL = 'amine.lhb00@gmail.com';
 
