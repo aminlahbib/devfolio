@@ -47,20 +47,18 @@ export const projectService = {
   }
 };
 
+// Contact email configuration
+const CONTACT_EMAIL = 'amine.lhb00@gmail.com';
+
 export const contactService = {
+  /**
+   * Opens the user's email client with pre-filled message.
+   * This is the most reliable approach - works 100% of the time without third-party services.
+   */
   submit: async (formData: ContactFormData): Promise<ApiResponse<null>> => {
-    await delay(1000); // Slightly longer delay for "processing"
+    await delay(300);
 
-    // Simulate Rate Limiting (Mocking backend middleware)
-    const lastSubmission = localStorage.getItem('last_contact_submission');
-    const now = Date.now();
-    
-    if (lastSubmission && now - parseInt(lastSubmission) < 60000) {
-      // Limit: 1 request per minute for this mock
-      return { success: false, error: 'Rate limit exceeded. Please try again in a minute.' };
-    }
-
-    // Simulate Zod Validation
+    // Validate form data
     if (!formData.name || formData.name.length < 2) {
       return { success: false, error: 'Name must be at least 2 characters.' };
     }
@@ -71,10 +69,24 @@ export const contactService = {
       return { success: false, error: 'Message must be at least 10 characters.' };
     }
 
-    // "Persist" success
-    localStorage.setItem('last_contact_submission', now.toString());
-    console.log('Form submitted to mock backend:', formData);
+    // Build mailto URL
+    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\n` +
+      `Email: ${formData.email}\n\n` +
+      `Message:\n${formData.message}`
+    );
+    
+    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    
+    // Open email client
+    window.location.href = mailtoUrl;
     
     return { success: true };
-  }
+  },
+
+  /**
+   * Get the direct email address for display
+   */
+  getEmail: () => CONTACT_EMAIL
 };

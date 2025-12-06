@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Check, AlertCircle, Mail, MapPin } from 'lucide-react';
+import { Send, Check, AlertCircle, Mail, MapPin, ExternalLink } from 'lucide-react';
 import { contactService } from '../services/api';
 import { LoadStatus } from '../types';
 import SEO from '../components/SEO';
@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
 
     if (response.success) {
       setStatus(LoadStatus.SUCCESS);
-      setFormData({ name: '', email: '', message: '' });
+      // Don't clear form data - user might need to copy it if email client doesn't open
     } else {
       setStatus(LoadStatus.ERROR);
       setErrorMessage(response.error || 'Something went wrong.');
@@ -46,22 +46,24 @@ const Contact: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-headline text-neutral-900 dark:text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-white tracking-tight mb-4">
               Get in touch
             </h1>
-            <p className="text-body text-neutral-600 dark:text-neutral-400 mb-10">
+            <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-10 leading-relaxed">
               Have a project in mind? I'd love to hear about it. Send me a message 
               and I'll get back to you as soon as possible.
             </p>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <Mail size={20} className="text-neutral-400 mt-0.5" />
+                <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center flex-shrink-0">
+                  <Mail size={18} className="text-neutral-600 dark:text-neutral-400" />
+                </div>
                 <div>
-                  <p className="text-small text-neutral-500 dark:text-neutral-400 mb-1">Email</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">Email</p>
                   <a 
                     href="mailto:amine.lhb00@gmail.com"
-                    className="text-body text-neutral-900 dark:text-white hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                    className="text-neutral-900 dark:text-white hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                   >
                     amine.lhb00@gmail.com
                   </a>
@@ -69,15 +71,40 @@ const Contact: React.FC = () => {
               </div>
               
               <div className="flex items-start gap-4">
-                <MapPin size={20} className="text-neutral-400 mt-0.5" />
+                <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center flex-shrink-0">
+                  <MapPin size={18} className="text-neutral-600 dark:text-neutral-400" />
+                </div>
                 <div>
-                  <p className="text-small text-neutral-500 dark:text-neutral-400 mb-1">Location</p>
-                  <p className="text-body text-neutral-900 dark:text-white">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">Location</p>
+                  <p className="text-neutral-900 dark:text-white">
                     Zweibrücken, Germany
                   </p>
-                  <p className="text-caption text-neutral-500 dark:text-neutral-400">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
                     Available for remote work
                   </p>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div className="pt-6 border-t border-neutral-200 dark:border-neutral-800">
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Connect with me</p>
+                <div className="flex gap-3">
+                  <a
+                    href="https://github.com/aminlahbib"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white bg-neutral-100 dark:bg-neutral-900 rounded-full transition-colors"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    href="https://linkedin.com/in/aminlahbib"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white bg-neutral-100 dark:bg-neutral-900 rounded-full transition-colors"
+                  >
+                    LinkedIn
+                  </a>
                 </div>
               </div>
             </div>
@@ -91,18 +118,30 @@ const Contact: React.FC = () => {
           >
             {status === LoadStatus.SUCCESS ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center mb-4">
-                  <Check size={24} className="text-neutral-900 dark:text-white" />
+                <div className="w-14 h-14 rounded-full bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center mb-5">
+                  <Check size={28} className="text-neutral-900 dark:text-white" />
                 </div>
-                <h3 className="text-title text-neutral-900 dark:text-white mb-2">
-                  Message sent
+                <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+                  Email client opened
                 </h3>
-                <p className="text-body text-neutral-600 dark:text-neutral-400 mb-6">
-                  Thanks for reaching out. I'll be in touch soon.
+                <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-sm">
+                  Your email app should have opened with the message pre-filled. Just hit send!
+                </p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
+                  Didn't work? Send directly to{' '}
+                  <a 
+                    href="mailto:amine.lhb00@gmail.com" 
+                    className="text-neutral-900 dark:text-white underline underline-offset-2"
+                  >
+                    amine.lhb00@gmail.com
+                  </a>
                 </p>
                 <button 
-                  onClick={() => setStatus(LoadStatus.IDLE)} 
-                  className="text-caption text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                  onClick={() => {
+                    setStatus(LoadStatus.IDLE);
+                    setFormData({ name: '', email: '', message: '' });
+                  }} 
+                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 >
                   Send another message
                 </button>
@@ -110,7 +149,7 @@ const Contact: React.FC = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-small text-neutral-500 dark:text-neutral-400 mb-2">
+                  <label htmlFor="name" className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
                     Name
                   </label>
                   <input
@@ -126,7 +165,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-small text-neutral-500 dark:text-neutral-400 mb-2">
+                  <label htmlFor="email" className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
                     Email
                   </label>
                   <input
@@ -142,7 +181,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-small text-neutral-500 dark:text-neutral-400 mb-2">
+                  <label htmlFor="message" className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
                     Message
                   </label>
                   <textarea
@@ -158,29 +197,39 @@ const Contact: React.FC = () => {
                 </div>
 
                 {status === LoadStatus.ERROR && (
-                  <div className="flex items-center gap-2 text-caption text-red-600 dark:text-red-400">
+                  <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
                     <AlertCircle size={16} />
                     {errorMessage}
                   </div>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={status === LoadStatus.LOADING}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-caption font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {status === LoadStatus.LOADING ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 dark:border-neutral-900/30 border-t-white dark:border-t-neutral-900 rounded-full animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      Send Message
-                      <Send size={16} />
-                    </>
-                  )}
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  <button
+                    type="submit"
+                    disabled={status === LoadStatus.LOADING}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {status === LoadStatus.LOADING ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 dark:border-neutral-900/30 border-t-white dark:border-t-neutral-900 rounded-full animate-spin" />
+                        Opening...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send size={16} />
+                      </>
+                    )}
+                  </button>
+                  
+                  <a
+                    href="mailto:amine.lhb00@gmail.com"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                  >
+                    <ExternalLink size={16} />
+                    Open Email
+                  </a>
+                </div>
               </form>
             )}
           </motion.div>
