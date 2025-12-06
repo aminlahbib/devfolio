@@ -1,55 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Activity, Users, Tag, ArrowUpRight, Zap, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Github, ExternalLink, Check, ChevronLeft, ChevronRight, Play, Mail } from 'lucide-react';
 import { projectService } from '../services/api';
 import { Project, LoadStatus } from '../types';
 import SEO from '../components/SEO';
-
-const getCategoryStyle = (category: string) => {
-  switch (category) {
-    case 'Frontend':
-      return {
-        bg: 'bg-pink-500/10 dark:bg-pink-500/20',
-        text: 'text-pink-600 dark:text-pink-400',
-        border: 'border-pink-500/20',
-        gradient: 'from-pink-500 to-rose-500'
-      };
-    case 'Backend':
-      return {
-        bg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
-        text: 'text-emerald-600 dark:text-emerald-400',
-        border: 'border-emerald-500/20',
-        gradient: 'from-emerald-500 to-teal-500'
-      };
-    case 'DevOps':
-      return {
-        bg: 'bg-violet-500/10 dark:bg-violet-500/20',
-        text: 'text-violet-600 dark:text-violet-400',
-        border: 'border-violet-500/20',
-        gradient: 'from-violet-500 to-purple-500'
-      };
-    case 'Full Stack':
-      return {
-        bg: 'bg-brand-500/10 dark:bg-brand-500/20',
-        text: 'text-brand-600 dark:text-brand-400',
-        border: 'border-brand-500/20',
-        gradient: 'from-brand-500 to-accent-500'
-      };
-    default:
-      return {
-        bg: 'bg-surface-100 dark:bg-surface-800',
-        text: 'text-surface-600 dark:text-surface-400',
-        border: 'border-surface-200 dark:border-surface-700',
-        gradient: 'from-surface-500 to-surface-600'
-      };
-  }
-};
 
 const ProjectDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [project, setProject] = useState<Project | null>(null);
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.IDLE);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const loadProject = async () => {
@@ -59,6 +21,10 @@ const ProjectDetail: React.FC = () => {
       if (response.success && response.data) {
         setProject(response.data);
         setStatus(LoadStatus.SUCCESS);
+        // Set first tab as active if tabs exist
+        if (response.data.tabs && response.data.tabs.length > 0) {
+          setActiveTab(response.data.tabs[0].id);
+        }
       } else {
         setStatus(LoadStatus.ERROR);
       }
@@ -66,58 +32,40 @@ const ProjectDetail: React.FC = () => {
     loadProject();
   }, [slug]);
 
+  const images = project?.images || (project?.imageUrl ? [project.imageUrl] : []);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   if (status === LoadStatus.LOADING) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="relative">
-          <div className="w-16 h-16 rounded-full border-4 border-surface-200 dark:border-surface-700" />
-          <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-t-brand-500 border-r-transparent border-b-transparent border-l-transparent animate-spin" />
-        </div>
+        <div className="w-6 h-6 border-2 border-neutral-300 dark:border-neutral-700 border-t-neutral-900 dark:border-t-white rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!project || status === LoadStatus.ERROR) {
     return (
-      <div className="min-h-screen pt-32 px-4 text-center">
-        <SEO title="Project Not Found" description="The requested project could not be found." />
-        <div className="max-w-md mx-auto">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-surface-100 dark:bg-surface-800 flex items-center justify-center">
-            <span className="text-4xl">🔍</span>
-          </div>
-          <h2 className="text-2xl font-bold text-surface-900 dark:text-white mb-4">Project not found</h2>
-          <p className="text-surface-600 dark:text-surface-400 mb-8">
-            The project you're looking for doesn't exist or has been moved.
-          </p>
-          <Link 
-            to="/projects" 
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white font-medium hover:bg-brand-600 transition-colors"
-          >
-            <ArrowLeft size={18} />
-            Back to Projects
-          </Link>
-        </div>
+      <div className="min-h-screen pt-28 px-6 text-center">
+        <SEO title="Not Found" description="Project not found." />
+        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">Project not found</h2>
+        <Link to="/projects" className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
+          ← Back to work
+        </Link>
       </div>
     );
   }
 
-  const categoryStyle = getCategoryStyle(project.category);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } }
-  };
+  const activeTabContent = project.tabs?.find(tab => tab.id === activeTab);
 
   return (
-    <div className="min-h-screen pt-28 pb-20">
+    <div className="min-h-screen pt-28 pb-24">
       <SEO 
         title={project.title} 
         description={project.shortDescription}
@@ -125,193 +73,402 @@ const ProjectDetail: React.FC = () => {
         keywords={project.tags}
       />
       
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Breadcrumb */}
-        <motion.nav
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-sm text-surface-500 dark:text-surface-400 mb-8"
-        >
-          <Link to="/projects" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-            Projects
-          </Link>
-          <ChevronRight size={14} />
-          <span className="text-surface-900 dark:text-white font-medium truncate">{project.title}</span>
-        </motion.nav>
+      {/* Hero Section */}
+      <div className="px-6 mb-16">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link 
+              to="/projects"
+              className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors mb-12"
+            >
+              <ArrowLeft size={16} />
+              All Projects
+            </Link>
+          </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {/* Header */}
-          <motion.div variants={itemVariants} className="mb-8">
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${categoryStyle.bg} ${categoryStyle.text} border ${categoryStyle.border} mb-4`}>
-              <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${categoryStyle.gradient}`} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="inline-block text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-4">
               {project.category}
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl font-bold text-surface-900 dark:text-white mb-4 leading-tight">
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-neutral-900 dark:text-white tracking-tight mb-6">
               {project.title}
             </h1>
-            
-            <p className="text-xl text-surface-600 dark:text-surface-400 mb-8 leading-relaxed">
+            <p className="text-xl md:text-2xl text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-3xl">
               {project.shortDescription}
             </p>
-            
+
             {/* Action Buttons */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3 mt-8">
               {project.repoUrl && (
                 <a 
-                  href={project.repoUrl} 
-                  target="_blank" 
+                  href={project.repoUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-surface-900 dark:bg-white text-white dark:text-surface-900 rounded-xl font-medium hover:bg-surface-800 dark:hover:bg-surface-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-200 dark:border-neutral-800 rounded-full text-sm font-medium text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
                 >
-                  <Github size={20} />
+                  <Github size={18} />
                   View Repository
                 </a>
               )}
               {project.demoUrl && (
                 <a 
-                  href={project.demoUrl} 
-                  target="_blank" 
+                  href={project.demoUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-brand-500 to-accent-500 text-white rounded-xl font-medium shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:shadow-xl transition-all hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
                 >
-                  <ExternalLink size={20} />
+                  <ExternalLink size={18} />
                   Live Demo
-                  <ArrowUpRight size={16} />
                 </a>
               )}
+              <Link
+                to="/contact"
+                state={{ subject: `Demo Request: ${project.title}` }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors"
+              >
+                <Play size={18} />
+                Request a Demo
+              </Link>
             </div>
           </motion.div>
+        </div>
+      </div>
 
-          {/* Main Image */}
-          <motion.div 
-            variants={itemVariants}
-            className="rounded-2xl overflow-hidden border border-surface-200 dark:border-surface-700 shadow-2xl mb-12 bg-surface-100 dark:bg-surface-800"
-          >
-            <img 
-              src={project.imageUrl} 
-              alt={project.title} 
-              className="w-full h-auto"
-              loading="lazy"
-            />
-          </motion.div>
+      {/* Image Gallery */}
+      <motion.div 
+        className="px-6 mb-20"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-900 shadow-sm">
+            {/* Main Image */}
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentImageIndex}
+                src={images[currentImageIndex]}
+                alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                className="w-full h-auto object-cover aspect-[16/9]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                loading="lazy"
+              />
+            </AnimatePresence>
 
-          {/* Metrics Section */}
-          {project.metrics && project.metrics.length > 0 && (
-            <motion.div variants={itemVariants} className="mb-12">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-lg bg-brand-500/10 dark:bg-brand-500/20">
-                  <Activity className="text-brand-600 dark:text-brand-400" size={20} />
-                </div>
-                <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
-                  Key Metrics
-                </h2>
-              </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {project.metrics.map((metric, i) => (
-                  <motion.div 
-                    key={i}
-                    whileHover={{ scale: 1.05, y: -4 }}
-                    className="relative group bg-white dark:bg-surface-800/50 border border-surface-200 dark:border-surface-700 p-5 rounded-2xl text-center hover:border-brand-500/50 dark:hover:border-brand-500/50 transition-all hover:shadow-lg"
-                  >
-                    <div className="text-2xl font-bold gradient-text mb-1">
-                      {metric.value}
-                    </div>
-                    <div className="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">
-                      {metric.label}
-                    </div>
-                    {/* Gradient accent */}
-                    <div className={`absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r ${categoryStyle.gradient} opacity-0 group-hover:opacity-100 transition-opacity rounded-full`} />
-                  </motion.div>
+            {/* Navigation Arrows */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 dark:bg-neutral-900/90 text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 transition-colors shadow-lg"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 dark:bg-neutral-900/90 text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 transition-colors shadow-lg"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+
+            {/* Image Indicators */}
+            {images.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentImageIndex
+                        ? 'bg-white w-6'
+                        : 'bg-white/50 hover:bg-white/75'
+                    }`}
+                    aria-label={`Go to image ${index + 1}`}
+                  />
                 ))}
               </div>
-            </motion.div>
-          )}
+            )}
+          </div>
 
-          {/* Description */}
-          <motion.div variants={itemVariants} className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-accent-500/10 dark:bg-accent-500/20">
-                <Zap className="text-accent-600 dark:text-accent-400" size={20} />
-              </div>
-              <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
-                About the Project
-              </h2>
-            </div>
-            
-            <div className="prose prose-lg prose-surface dark:prose-invert max-w-none">
-              <p className="text-surface-600 dark:text-surface-300 leading-relaxed whitespace-pre-line">
-                {project.fullDescription}
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Tech Stack */}
-          <motion.div variants={itemVariants} className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-violet-500/10 dark:bg-violet-500/20">
-                <Tag className="text-violet-600 dark:text-violet-400" size={20} />
-              </div>
-              <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
-                Technologies Used
-              </h2>
-            </div>
-            
-            <div className="flex flex-wrap gap-3">
-              {project.tags.map(tag => (
-                <span 
-                  key={tag} 
-                  className="px-4 py-2 rounded-xl text-sm font-medium bg-surface-100 dark:bg-surface-800 text-surface-700 dark:text-surface-300 border border-surface-200 dark:border-surface-700 hover:border-brand-500/50 dark:hover:border-brand-500/50 transition-colors"
+          {/* Thumbnail Strip */}
+          {images.length > 1 && (
+            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+              {images.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden transition-all ${
+                    index === currentImageIndex
+                      ? 'ring-2 ring-neutral-900 dark:ring-white ring-offset-2 ring-offset-white dark:ring-offset-neutral-950'
+                      : 'opacity-60 hover:opacity-100'
+                  }`}
                 >
-                  {tag}
-                </span>
+                  <img
+                    src={img}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
               ))}
             </div>
-          </motion.div>
-
-          {/* Used By Section */}
-          {project.usedBy && project.usedBy.length > 0 && (
-            <motion.div variants={itemVariants} className="mb-12">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20">
-                  <Users className="text-emerald-600 dark:text-emerald-400" size={20} />
-                </div>
-                <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
-                  Use Cases & Applications
-                </h2>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {project.usedBy.map((entity, i) => (
-                  <div 
-                    key={i} 
-                    className="flex items-start gap-4 p-5 bg-white dark:bg-surface-800/50 rounded-2xl border border-surface-200 dark:border-surface-700"
-                  >
-                    <div className="w-2 h-2 mt-2 rounded-full bg-gradient-to-r from-brand-500 to-accent-500 flex-shrink-0" />
-                    <span className="text-surface-700 dark:text-surface-300">{entity}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
           )}
+        </div>
+      </motion.div>
 
-          {/* Back to Projects */}
-          <motion.div variants={itemVariants} className="pt-8 border-t border-surface-200 dark:border-surface-800">
-            <Link 
-              to="/projects"
-              className="inline-flex items-center gap-2 text-surface-600 dark:text-surface-400 hover:text-brand-600 dark:hover:text-brand-400 font-medium transition-colors"
+      {/* Metrics Grid */}
+      {project.metrics && project.metrics.length > 0 && (
+        <motion.section 
+          className="px-6 mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-10 border-y border-neutral-200 dark:border-neutral-800">
+              {project.metrics.map((metric, i) => (
+                <div key={i} className="text-center">
+                  <p className="text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white mb-1">
+                    {metric.value}
+                  </p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                    {metric.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+      )}
+
+      {/* Main Content */}
+      <div className="px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+            {/* Tabbed Content - Main Column */}
+            <motion.div 
+              className="lg:col-span-2"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <ArrowLeft size={18} />
-              Back to all projects
-            </Link>
-          </motion.div>
-        </motion.div>
+              {/* Tabs */}
+              {project.tabs && project.tabs.length > 0 ? (
+                <>
+                  <div className="flex gap-1 mb-8 overflow-x-auto pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                    {project.tabs.map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-4 py-2 text-sm font-medium whitespace-nowrap transition-all relative ${
+                          activeTab === tab.id
+                            ? 'text-neutral-900 dark:text-white'
+                            : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+                        }`}
+                      >
+                        {tab.label}
+                        {activeTab === tab.id && (
+                          <motion.div
+                            layoutId="activeTab"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-neutral-900 dark:bg-white"
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Tab Content */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeTab}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="prose prose-neutral dark:prose-invert max-w-none"
+                    >
+                      {activeTabContent?.content.split('\n\n').map((paragraph, i) => {
+                        // Check if paragraph contains bold text (markdown-like)
+                        if (paragraph.includes('**')) {
+                          const parts = paragraph.split(/\*\*(.*?)\*\*/g);
+                          return (
+                            <p key={i} className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+                              {parts.map((part, j) => 
+                                j % 2 === 1 ? (
+                                  <strong key={j} className="font-semibold text-neutral-900 dark:text-white">{part}</strong>
+                                ) : (
+                                  <span key={j}>{part}</span>
+                                )
+                              )}
+                            </p>
+                          );
+                        }
+                        return (
+                          <p key={i} className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+                            {paragraph.trim()}
+                          </p>
+                        );
+                      })}
+                    </motion.div>
+                  </AnimatePresence>
+                </>
+              ) : (
+                // Fallback to full description if no tabs
+                <>
+                  <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-6">
+                    Overview
+                  </h2>
+                  <div className="space-y-6">
+                    {project.fullDescription.trim().split('\n\n').filter(p => p.trim()).map((paragraph, i) => (
+                      <p key={i} className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                        {paragraph.trim()}
+                      </p>
+                    ))}
+                  </div>
+                </>
+              )}
+            </motion.div>
+
+            {/* Sidebar */}
+            <motion.aside 
+              className="lg:col-span-1 space-y-10"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              {/* Key Highlights */}
+              {project.usedBy && project.usedBy.length > 0 && (
+                <div>
+                  <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
+                    Key Highlights
+                  </h2>
+                  <ul className="space-y-3">
+                    {project.usedBy.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-neutral-900 dark:bg-white flex items-center justify-center">
+                          <Check size={10} className="text-white dark:text-neutral-900" />
+                        </span>
+                        <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Technologies */}
+              <div>
+                <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
+                  Tech Stack
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map(tag => (
+                    <span 
+                      key={tag} 
+                      className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-900 text-xs font-medium text-neutral-700 dark:text-neutral-300 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div>
+                <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
+                  Links
+                </h2>
+                <div className="space-y-2">
+                  {project.repoUrl && (
+                    <a 
+                      href={project.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    >
+                      <Github size={16} />
+                      GitHub Repository
+                    </a>
+                  )}
+                  {project.demoUrl && (
+                    <a 
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    >
+                      <ExternalLink size={16} />
+                      Live Demo
+                    </a>
+                  )}
+                  <Link 
+                    to="/contact"
+                    state={{ subject: `Demo Request: ${project.title}` }}
+                    className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                  >
+                    <Mail size={16} />
+                    Request a Demo
+                  </Link>
+                </div>
+              </div>
+            </motion.aside>
+          </div>
+        </div>
       </div>
+
+      {/* CTA Section */}
+      <motion.section 
+        className="px-6 mt-24"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
+        <div className="max-w-4xl mx-auto py-12 border-t border-neutral-200 dark:border-neutral-800">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-1">
+                Interested in this project?
+              </h3>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Let's discuss how I can help with your project.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Link 
+                to="/contact"
+                state={{ subject: `Demo Request: ${project.title}` }}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors"
+              >
+                <Play size={16} />
+                Request Demo
+              </Link>
+              <Link 
+                to="/contact"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
+              >
+                Get in Touch
+              </Link>
+            </div>
+          </div>
+        </div>
+      </motion.section>
     </div>
   );
 };

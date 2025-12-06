@@ -1,3 +1,9 @@
+export interface ProjectTab {
+  id: string;
+  label: string;
+  content: string;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -7,6 +13,7 @@ export interface Project {
   tags: string[];
   category: 'Frontend' | 'Backend' | 'DevOps' | 'Full Stack';
   imageUrl: string;
+  images?: string[]; // Multiple images for gallery
   repoUrl?: string;
   demoUrl?: string;
   featured: boolean;
@@ -15,6 +22,7 @@ export interface Project {
     value: string;
   }[];
   usedBy?: string[];
+  tabs?: ProjectTab[]; // Tabbed content sections
 }
 
 export interface ContactFormData {
