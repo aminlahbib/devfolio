@@ -47,18 +47,18 @@ export const projectService = {
   }
 };
 
-// Contact email configuration
+// Web3Forms configuration
+// Get your access key at: https://web3forms.com/
+const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE'; // <-- Replace with your actual key
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
 const CONTACT_EMAIL = 'amine.lhb00@gmail.com';
 
 export const contactService = {
   /**
-   * Opens the user's email client with pre-filled message.
-   * This is the most reliable approach - works 100% of the time without third-party services.
+   * Submit contact form via Web3Forms API
    */
   submit: async (formData: ContactFormData): Promise<ApiResponse<null>> => {
-    await delay(300);
-
-    // Validate form data
+    // Validate form data locally first
     if (!formData.name || formData.name.length < 2) {
       return { success: false, error: 'Name must be at least 2 characters.' };
     }
@@ -69,7 +69,47 @@ export const contactService = {
       return { success: false, error: 'Message must be at least 10 characters.' };
     }
 
-    // Build mailto URL
+    // Check if access key is configured
+    if (WEB3FORMS_ACCESS_KEY === 'YOUR_ACCESS_KEY_HERE') {
+      console.warn('Web3Forms access key not configured. Using mailto fallback.');
+      return contactService.submitViaMailto(formData);
+    }
+
+    try {
+      const response = await fetch(WEB3FORMS_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          subject: `Portfolio Contact from ${formData.name}`,
+          from_name: 'Portfolio Contact Form',
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        return { success: true };
+      } else {
+        console.error('Web3Forms error:', result);
+        return { success: false, error: result.message || 'Failed to send message.' };
+      }
+    } catch (error) {
+      console.error('Contact form error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  },
+
+  /**
+   * Fallback: Opens email client with pre-filled message
+   */
+  submitViaMailto: async (formData: ContactFormData): Promise<ApiResponse<null>> => {
     const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
     const body = encodeURIComponent(
       `Name: ${formData.name}\n` +
@@ -77,11 +117,7 @@ export const contactService = {
       `Message:\n${formData.message}`
     );
     
-    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    
-    // Open email client
-    window.location.href = mailtoUrl;
-    
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
     return { success: true };
   },
 
