@@ -1,6 +1,13 @@
-# DevFolio
+# Amine Lahbib - Portfolio
 
-A modern, responsive portfolio website built with React and TypeScript, featuring smooth animations, dark mode, and a clean design.
+A modern, responsive portfolio website showcasing my full-stack development projects, built with React and TypeScript.
+
+## 🚀 Featured Projects
+
+- **Cloud Secrets Manager** - Enterprise microservices platform with Kubernetes (Java, Spring Boot, React)
+- **Supreme Bus** - Distributed booking system with 4 microservices (Java, Spring Boot, Docker Compose)
+- **Real-time AI TTS System** - High-performance Rust application with sub-millisecond latency
+- **Equipment Management System** - Cloud-native application with Kubernetes orchestration
 
 ## Getting Started
 

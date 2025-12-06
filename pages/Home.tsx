@@ -133,13 +133,13 @@ const Home: React.FC = () => {
             Contact Me
           </Link>
           <a
-            href="/resume.pdf"
+            href="https://github.com/aminlahbib"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-4 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-200 font-semibold border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2"
           >
             <Download size={20} />
-            Resume
+            View Resume
           </a>
         </motion.div>
       </section>
