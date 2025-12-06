@@ -1,23 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Activity, Users } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, Activity, Users, Tag, ArrowUpRight, Zap, ChevronRight } from 'lucide-react';
 import { projectService } from '../services/api';
 import { Project, LoadStatus } from '../types';
 import SEO from '../components/SEO';
 
-const getCategoryColor = (category: string) => {
+const getCategoryStyle = (category: string) => {
   switch (category) {
     case 'Frontend':
-      return 'text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 border-pink-200 dark:border-pink-500/20';
+      return {
+        bg: 'bg-pink-500/10 dark:bg-pink-500/20',
+        text: 'text-pink-600 dark:text-pink-400',
+        border: 'border-pink-500/20',
+        gradient: 'from-pink-500 to-rose-500'
+      };
     case 'Backend':
-      return 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-500/20';
+      return {
+        bg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
+        text: 'text-emerald-600 dark:text-emerald-400',
+        border: 'border-emerald-500/20',
+        gradient: 'from-emerald-500 to-teal-500'
+      };
     case 'DevOps':
-      return 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/20 border-violet-200 dark:border-violet-500/20';
+      return {
+        bg: 'bg-violet-500/10 dark:bg-violet-500/20',
+        text: 'text-violet-600 dark:text-violet-400',
+        border: 'border-violet-500/20',
+        gradient: 'from-violet-500 to-purple-500'
+      };
     case 'Full Stack':
-      return 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-500/20';
+      return {
+        bg: 'bg-brand-500/10 dark:bg-brand-500/20',
+        text: 'text-brand-600 dark:text-brand-400',
+        border: 'border-brand-500/20',
+        gradient: 'from-brand-500 to-accent-500'
+      };
     default:
-      return 'text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700';
+      return {
+        bg: 'bg-surface-100 dark:bg-surface-800',
+        text: 'text-surface-600 dark:text-surface-400',
+        border: 'border-surface-200 dark:border-surface-700',
+        gradient: 'from-surface-500 to-surface-600'
+      };
   }
 };
 
@@ -44,23 +69,55 @@ const ProjectDetail: React.FC = () => {
   if (status === LoadStatus.LOADING) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-500"></div>
+        <div className="relative">
+          <div className="w-16 h-16 rounded-full border-4 border-surface-200 dark:border-surface-700" />
+          <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-t-brand-500 border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+        </div>
       </div>
     );
   }
 
   if (!project || status === LoadStatus.ERROR) {
     return (
-      <div className="min-h-screen pt-24 px-4 text-center">
+      <div className="min-h-screen pt-32 px-4 text-center">
         <SEO title="Project Not Found" description="The requested project could not be found." />
-        <h2 className="text-2xl text-slate-900 dark:text-white mb-4">Project not found</h2>
-        <Link to="/projects" className="text-brand-600 dark:text-brand-400 hover:underline">Back to Projects</Link>
+        <div className="max-w-md mx-auto">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-surface-100 dark:bg-surface-800 flex items-center justify-center">
+            <span className="text-4xl">🔍</span>
+          </div>
+          <h2 className="text-2xl font-bold text-surface-900 dark:text-white mb-4">Project not found</h2>
+          <p className="text-surface-600 dark:text-surface-400 mb-8">
+            The project you're looking for doesn't exist or has been moved.
+          </p>
+          <Link 
+            to="/projects" 
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white font-medium hover:bg-brand-600 transition-colors"
+          >
+            <ArrowLeft size={18} />
+            Back to Projects
+          </Link>
+        </div>
       </div>
     );
   }
 
+  const categoryStyle = getCategoryStyle(project.category);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } }
+  };
+
   return (
-    <div className="min-h-screen pt-24 pb-20">
+    <div className="min-h-screen pt-28 pb-20">
       <SEO 
         title={project.title} 
         description={project.shortDescription}
@@ -68,31 +125,51 @@ const ProjectDetail: React.FC = () => {
         keywords={project.tags}
       />
       
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <Link to="/projects" className="inline-flex items-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white mb-8 transition-colors">
-          <ArrowLeft size={18} className="mr-2" /> Back to Projects
-        </Link>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        {/* Breadcrumb */}
+        <motion.nav
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-sm text-surface-500 dark:text-surface-400 mb-8"
+        >
+          <Link to="/projects" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+            Projects
+          </Link>
+          <ChevronRight size={14} />
+          <span className="text-surface-900 dark:text-white font-medium truncate">{project.title}</span>
+        </motion.nav>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
         >
           {/* Header */}
-          <div className="mb-8">
-            <span className={`text-sm font-mono border px-3 py-1 rounded-full ${getCategoryColor(project.category)}`}>
+          <motion.div variants={itemVariants} className="mb-8">
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${categoryStyle.bg} ${categoryStyle.text} border ${categoryStyle.border} mb-4`}>
+              <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${categoryStyle.gradient}`} />
               {project.category}
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mt-4 mb-4">{project.title}</h1>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl font-bold text-surface-900 dark:text-white mb-4 leading-tight">
+              {project.title}
+            </h1>
+            
+            <p className="text-xl text-surface-600 dark:text-surface-400 mb-8 leading-relaxed">
+              {project.shortDescription}
+            </p>
+            
+            {/* Action Buttons */}
             <div className="flex flex-wrap gap-4">
               {project.repoUrl && (
                 <a 
                   href={project.repoUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-white transition-colors border border-slate-200 dark:border-slate-700 shadow-sm dark:shadow-none"
+                  className="inline-flex items-center gap-2 px-5 py-3 bg-surface-900 dark:bg-white text-white dark:text-surface-900 rounded-xl font-medium hover:bg-surface-800 dark:hover:bg-surface-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 >
-                  <Github size={20} /> Repository
+                  <Github size={20} />
+                  View Repository
                 </a>
               )}
               {project.demoUrl && (
@@ -100,21 +177,20 @@ const ProjectDetail: React.FC = () => {
                   href={project.demoUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 rounded-lg hover:bg-brand-500 text-white transition-colors shadow-lg shadow-brand-500/20"
+                  className="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-brand-500 to-accent-500 text-white rounded-xl font-medium shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:shadow-xl transition-all hover:-translate-y-0.5"
                 >
-                  <ExternalLink size={20} /> Live Demo
+                  <ExternalLink size={20} />
+                  Live Demo
+                  <ArrowUpRight size={16} />
                 </a>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Main Image - Animated */}
+          {/* Main Image */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-2xl mb-12 bg-slate-100 dark:bg-slate-800"
+            variants={itemVariants}
+            className="rounded-2xl overflow-hidden border border-surface-200 dark:border-surface-700 shadow-2xl mb-12 bg-surface-100 dark:bg-surface-800"
           >
             <img 
               src={project.imageUrl} 
@@ -126,47 +202,72 @@ const ProjectDetail: React.FC = () => {
 
           {/* Metrics Section */}
           {project.metrics && project.metrics.length > 0 && (
-            <div className="mb-12">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <Activity className="text-brand-500" size={24} />
-                Performance Metrics
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <motion.div variants={itemVariants} className="mb-12">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-brand-500/10 dark:bg-brand-500/20">
+                  <Activity className="text-brand-600 dark:text-brand-400" size={20} />
+                </div>
+                <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
+                  Key Metrics
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {project.metrics.map((metric, i) => (
-                  <div 
-                    key={i} 
-                    className="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 p-6 rounded-xl text-center shadow-sm hover:shadow-md transition-all dark:shadow-none group"
+                  <motion.div 
+                    key={i}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    className="relative group bg-white dark:bg-surface-800/50 border border-surface-200 dark:border-surface-700 p-5 rounded-2xl text-center hover:border-brand-500/50 dark:hover:border-brand-500/50 transition-all hover:shadow-lg"
                   >
-                    <div className="text-3xl font-extrabold text-brand-600 dark:text-brand-400 mb-2 group-hover:scale-110 transition-transform duration-300 inline-block">
+                    <div className="text-2xl font-bold gradient-text mb-1">
                       {metric.value}
                     </div>
-                    <div className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <div className="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">
                       {metric.label}
                     </div>
-                  </div>
+                    {/* Gradient accent */}
+                    <div className={`absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r ${categoryStyle.gradient} opacity-0 group-hover:opacity-100 transition-opacity rounded-full`} />
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Description */}
-          <div className="prose prose-lg prose-slate dark:prose-invert max-w-none mb-12">
-            <h3 className="text-slate-900 dark:text-white">About the Project</h3>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{project.fullDescription}</p>
-          </div>
+          <motion.div variants={itemVariants} className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-accent-500/10 dark:bg-accent-500/20">
+                <Zap className="text-accent-600 dark:text-accent-400" size={20} />
+              </div>
+              <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
+                About the Project
+              </h2>
+            </div>
+            
+            <div className="prose prose-lg prose-surface dark:prose-invert max-w-none">
+              <p className="text-surface-600 dark:text-surface-300 leading-relaxed whitespace-pre-line">
+                {project.fullDescription}
+              </p>
+            </div>
+          </motion.div>
 
-          {/* Tech Stack - Animated */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="border-t border-slate-200 dark:border-slate-800 pt-8 mb-8"
-          >
-            <h3 className="text-slate-900 dark:text-white text-lg font-bold mb-4">Technologies Used</h3>
+          {/* Tech Stack */}
+          <motion.div variants={itemVariants} className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-violet-500/10 dark:bg-violet-500/20">
+                <Tag className="text-violet-600 dark:text-violet-400" size={20} />
+              </div>
+              <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
+                Technologies Used
+              </h2>
+            </div>
+            
             <div className="flex flex-wrap gap-3">
               {project.tags.map(tag => (
-                <span key={tag} className="px-3 py-1.5 rounded-full text-sm font-medium border transition-colors bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700/50">
+                <span 
+                  key={tag} 
+                  className="px-4 py-2 rounded-xl text-sm font-medium bg-surface-100 dark:bg-surface-800 text-surface-700 dark:text-surface-300 border border-surface-200 dark:border-surface-700 hover:border-brand-500/50 dark:hover:border-brand-500/50 transition-colors"
+                >
                   {tag}
                 </span>
               ))}
@@ -175,27 +276,40 @@ const ProjectDetail: React.FC = () => {
 
           {/* Used By Section */}
           {project.usedBy && project.usedBy.length > 0 && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="border-t border-slate-200 dark:border-slate-800 pt-8"
-            >
-              <h3 className="text-slate-900 dark:text-white text-lg font-bold mb-4 flex items-center gap-2">
-                <Users className="text-violet-500" size={20} />
-                Used By
-              </h3>
-              <div className="flex flex-wrap gap-4">
+            <motion.div variants={itemVariants} className="mb-12">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20">
+                  <Users className="text-emerald-600 dark:text-emerald-400" size={20} />
+                </div>
+                <h2 className="text-2xl font-bold text-surface-900 dark:text-white">
+                  Use Cases & Applications
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {project.usedBy.map((entity, i) => (
-                  <div key={i} className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                    <span className="font-semibold">{entity}</span>
+                  <div 
+                    key={i} 
+                    className="flex items-start gap-4 p-5 bg-white dark:bg-surface-800/50 rounded-2xl border border-surface-200 dark:border-surface-700"
+                  >
+                    <div className="w-2 h-2 mt-2 rounded-full bg-gradient-to-r from-brand-500 to-accent-500 flex-shrink-0" />
+                    <span className="text-surface-700 dark:text-surface-300">{entity}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
           )}
 
+          {/* Back to Projects */}
+          <motion.div variants={itemVariants} className="pt-8 border-t border-surface-200 dark:border-surface-800">
+            <Link 
+              to="/projects"
+              className="inline-flex items-center gap-2 text-surface-600 dark:text-surface-400 hover:text-brand-600 dark:hover:text-brand-400 font-medium transition-colors"
+            >
+              <ArrowLeft size={18} />
+              Back to all projects
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </div>
