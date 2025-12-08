@@ -80,3 +80,4 @@ devfolio/
 ---
 
 Built with React, TypeScript, and Tailwind CSS. Deployed on Vercel.
+A lot of Coffee was consumed during the development of this portfolio.
