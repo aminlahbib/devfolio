@@ -99,19 +99,33 @@ const Home: React.FC = () => {
             </h2>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-              {expertise.map((area) => (
-                <div key={area.title}>
-                  <h3 className="text-caption font-medium text-neutral-900 dark:text-white mb-3">
+              {expertise.map((area, index) => (
+                <motion.div 
+                  key={area.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <h3 className="text-caption font-medium text-neutral-900 dark:text-white mb-3 transition-colors group-hover:text-neutral-700 dark:group-hover:text-neutral-200">
                     {t(`home.expertise.${area.title.toLowerCase().replace(' ', '')}`)}
                   </h3>
                   <ul className="space-y-1.5">
-                    {area.items.map((item) => (
-                      <li key={item} className="text-caption text-neutral-500 dark:text-neutral-400">
+                    {area.items.map((item, itemIndex) => (
+                      <motion.li 
+                        key={item} 
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: index * 0.1 + itemIndex * 0.05 }}
+                        className="text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-200 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 cursor-default"
+                      >
                         {item}
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
             ))}
             </div>
           </motion.div>
