@@ -34,7 +34,11 @@ const ProjectDetail: React.FC = () => {
     loadProject();
   }, [slug]);
 
-  const images = project?.images || (project?.imageUrl ? [project.imageUrl] : []);
+  const images = project 
+    ? (project.imageUrl 
+        ? [project.imageUrl, ...(project.images || [])]
+        : (project.images || []))
+    : [];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -152,14 +156,14 @@ const ProjectDetail: React.FC = () => {
         transition={{ duration: 0.6, delay: 0.1 }}
       >
         <div className="max-w-4xl mx-auto">
-          <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-900 shadow-sm">
+          <div className="relative overflow-hidden rounded-2xl bg-transparent shadow-sm">
             {/* Main Image */}
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentImageIndex}
                 src={images[currentImageIndex]}
                 alt={`${project.title} - Image ${currentImageIndex + 1}`}
-                className="w-full h-auto object-cover aspect-[16/9]"
+                className="w-full h-auto rounded-2xl"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
