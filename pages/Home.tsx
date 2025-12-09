@@ -16,7 +16,16 @@ const Home: React.FC = () => {
     const fetchProjects = async () => {
       const response = await projectService.getAll();
       if (response.success && response.data) {
-        setFeaturedProjects(response.data.filter(p => p.featured).slice(0, 3));
+        const featured = response.data.filter(p => p.featured).slice(0, 3);
+        setFeaturedProjects(featured);
+        
+        // Preload featured project images
+        featured.forEach(project => {
+          if (project.imageUrl) {
+            const img = new Image();
+            img.src = project.imageUrl;
+          }
+        });
       }
     };
     fetchProjects();
