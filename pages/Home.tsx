@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, FileStack } from 'lucide-react';
+import { 
+  SiReact, SiTypescript, SiTailwindcss, SiSpring, SiRust, SiNodedotjs, 
+  SiKubernetes, SiDocker, SiTerraform, SiPostgresql, SiRedis, SiMysql,
+  SiGooglecloud, SiFirebase, SiGrafana, SiPrometheus, SiGit, SiGithub, 
+  SiGitlab, SiLinux, SiApachemaven, SiPython
+} from 'react-icons/si';
+import { FaJava } from 'react-icons/fa';
 import { projectService } from '../services/api';
 import { Project } from '../types';
 import ProjectCard from '../components/ProjectCard';
@@ -31,11 +38,52 @@ const Home: React.FC = () => {
     fetchProjects();
   }, []);
 
-  const expertise = [
-    { title: 'frontend', items: ['React', 'TypeScript', 'Tailwind CSS'] },
-    { title: 'backend', items: ['Spring Boot', 'Rust', 'Node.js'] },
-    { title: 'infrastructure', items: ['Kubernetes', 'Docker', 'Terraform'] },
-    { title: 'data', items: ['PostgreSQL', 'Redis', 'MySQL'] },
+  const technologyIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+    // Frontend
+    'React': SiReact,
+    'TypeScript': SiTypescript,
+    'Tailwind CSS': SiTailwindcss,
+    // Backend
+    'Spring Boot': SiSpring,
+    'Rust': SiRust,
+    'Node.js': SiNodedotjs,
+    'Java': FaJava,
+    'Python': SiPython,
+    'Maven': SiApachemaven,
+    // Infrastructure
+    'Kubernetes': SiKubernetes,
+    'Docker': SiDocker,
+    'Terraform': SiTerraform,
+    // Cloud
+    'Google Cloud': SiGooglecloud,
+    'Firebase': SiFirebase,
+    'Grafana': SiGrafana,
+    'Loki': FileStack, // Using FileStack icon for Loki (logging tool)
+    'Prometheus': SiPrometheus,
+    // Version Control & Tools
+    'Git': SiGit,
+    'GitHub': SiGithub,
+    'GitLab': SiGitlab,
+    'Linux': SiLinux,
+    // Data
+    'PostgreSQL': SiPostgresql,
+    'Redis': SiRedis,
+    'MySQL': SiMysql,
+  };
+
+  const technologies = [
+    // Frontend
+    'React', 'TypeScript', 'Tailwind CSS',
+    // Backend
+    'Java', 'Spring Boot', 'Python', 'Rust', 'Node.js', 'Maven',
+    // Infrastructure & Cloud
+    'Kubernetes', 'Docker', 'Terraform', 'Google Cloud', 'Firebase',
+    // Observability
+    'Grafana', 'Loki', 'Prometheus',
+    // Version Control & Tools
+    'Git', 'GitHub', 'GitLab', 'Linux',
+    // Data
+    'PostgreSQL', 'Redis', 'MySQL',
   ];
 
   return (
@@ -94,39 +142,31 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-10">
+            <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-10 text-center">
               {t('home.expertise')}
             </h2>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-              {expertise.map((area, index) => (
-                <motion.div 
-                  key={area.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <h3 className="text-caption font-medium text-neutral-900 dark:text-white mb-3 transition-colors group-hover:text-neutral-700 dark:group-hover:text-neutral-200">
-                    {t(`home.expertise.${area.title.toLowerCase().replace(' ', '')}`)}
-                  </h3>
-                  <ul className="space-y-1.5">
-                    {area.items.map((item, itemIndex) => (
-                      <motion.li 
-                        key={item} 
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: index * 0.1 + itemIndex * 0.05 }}
-                        className="text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-200 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 cursor-default"
-                      >
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </motion.div>
-            ))}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+              {technologies.map((tech, index) => {
+                const TechIcon = technologyIcons[tech];
+                return (
+                  <motion.div
+                    key={tech}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.03 }}
+                    className="group"
+                  >
+                    <div className="text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-200 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 cursor-default flex items-center gap-2">
+                      {TechIcon && (
+                        <TechIcon size={16} className="text-neutral-400 dark:text-neutral-500 transition-colors group-hover:text-neutral-600 dark:group-hover:text-neutral-400 flex-shrink-0" />
+                      )}
+                      <span>{tech}</span>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         </div>
