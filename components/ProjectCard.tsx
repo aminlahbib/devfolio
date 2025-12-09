@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { Project } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,6 +10,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) => {
+  const { t } = useLanguage();
+  
   if (variant === 'list') {
     return (
       <Link
@@ -115,7 +118,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
               className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
             >
               <Github size={14} />
-              <span>Source</span>
+              <span>{t('projectCard.source')}</span>
               </a>
             )}
             {project.demoUrl && (
@@ -127,7 +130,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
               className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
             >
               <ExternalLink size={14} />
-              <span>Demo</span>
+              <span>{t('projectCard.demo')}</span>
             </a>
           )}
         </div>

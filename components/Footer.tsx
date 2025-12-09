@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="border-t border-neutral-200 dark:border-neutral-800">
@@ -13,19 +15,19 @@ const Footer: React.FC = () => {
               Amine Lahbib
             </p>
             <p className="text-caption text-neutral-500 dark:text-neutral-400">
-              Full Stack Engineer
+              {t('footer.role')}
             </p>
           </div>
           
           <nav className="flex flex-wrap gap-6">
             <a href="/#/" className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              Home
+              {t('nav.home')}
             </a>
             <a href="/#/projects" className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              Work
+              {t('nav.work')}
             </a>
             <a href="/#/contact" className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              Contact
+              {t('nav.contact')}
             </a>
             <a 
               href="https://github.com/aminlahbib" 

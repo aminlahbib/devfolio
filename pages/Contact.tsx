@@ -4,11 +4,13 @@ import { Send, Check, AlertCircle, Mail, MapPin } from 'lucide-react';
 import { contactService } from '../services/api';
 import { LoadStatus } from '../types';
 import SEO from '../components/SEO';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.IDLE);
   const [errorMessage, setErrorMessage] = useState('');
+  const { t } = useLanguage();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,11 +49,10 @@ const Contact: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
             <h1 className="text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-white tracking-tight mb-4">
-              Get in touch
+              {t('contact.title')}
             </h1>
             <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-10 leading-relaxed">
-              Have a project in mind? I'd love to hear about it. Send me a message 
-              and I'll get back to you as soon as possible.
+              {t('contact.subtitle')}
           </p>
 
           <div className="space-y-6">
@@ -60,7 +61,7 @@ const Contact: React.FC = () => {
                   <Mail size={18} className="text-neutral-600 dark:text-neutral-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">Email</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">{t('contact.email')}</p>
                   <a 
                     href="mailto:amine.lhb00@gmail.com"
                     className="text-neutral-900 dark:text-white hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
@@ -75,19 +76,19 @@ const Contact: React.FC = () => {
                   <MapPin size={18} className="text-neutral-600 dark:text-neutral-400" />
               </div>
                 <div>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">Location</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">{t('contact.location')}</p>
                   <p className="text-neutral-900 dark:text-white">
                     Zweibrücken, Germany
                   </p>
                   <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-                    Available for remote work
+                    {t('contact.availableRemote')}
                   </p>
             </div>
               </div>
 
               {/* Social Links */}
               <div className="pt-6 border-t border-neutral-200 dark:border-neutral-800">
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Connect with me</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">{t('contact.connect')}</p>
                 <div className="flex gap-3">
                   <a
                     href="https://github.com/aminlahbib"
@@ -122,23 +123,23 @@ const Contact: React.FC = () => {
                   <Check size={28} className="text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
-                  Message sent!
+                  {t('contact.form.success.title')}
                 </h3>
                 <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-sm">
-                  Thank you for reaching out. I'll get back to you as soon as possible.
+                  {t('contact.form.success.description')}
                 </p>
               <button 
                 onClick={() => setStatus(LoadStatus.IDLE)} 
                   className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
               >
-                Send another message
+                {t('contact.form.success.sendAnother')}
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                   <label htmlFor="name" className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                    Name
+                    {t('contact.form.name')}
                   </label>
                 <input
                   type="text"
@@ -148,13 +149,13 @@ const Contact: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                     className="w-full px-0 py-3 bg-transparent border-0 border-b border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors"
-                    placeholder="Your name"
+                    placeholder={t('contact.form.namePlaceholder')}
                 />
               </div>
 
               <div>
                   <label htmlFor="email" className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                    Email
+                    {t('contact.form.email')}
                   </label>
                 <input
                   type="email"
@@ -164,13 +165,13 @@ const Contact: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                     className="w-full px-0 py-3 bg-transparent border-0 border-b border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors"
-                    placeholder="your@email.com"
+                    placeholder={t('contact.form.emailPlaceholder')}
                 />
               </div>
 
               <div>
                   <label htmlFor="message" className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                    Message
+                    {t('contact.form.message')}
                   </label>
                 <textarea
                   id="message"
@@ -180,7 +181,7 @@ const Contact: React.FC = () => {
                   value={formData.message}
                   onChange={handleChange}
                     className="w-full px-0 py-3 bg-transparent border-0 border-b border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors resize-none"
-                  placeholder="Tell me about your project..."
+                  placeholder={t('contact.form.messagePlaceholder')}
                 />
               </div>
 
@@ -199,11 +200,11 @@ const Contact: React.FC = () => {
                 {status === LoadStatus.LOADING ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 dark:border-neutral-900/30 border-t-white dark:border-t-neutral-900 rounded-full animate-spin" />
-                      Sending...
+                      {t('contact.form.sending')}
                     </>
                 ) : (
                     <>
-                      Send Message
+                      {t('contact.form.send')}
                       <Send size={16} />
                     </>
                 )}
