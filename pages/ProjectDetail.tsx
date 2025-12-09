@@ -87,14 +87,14 @@ const ProjectDetail: React.FC = () => {
             >
               <ArrowLeft size={16} />
               All Projects
-            </Link>
+        </Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
             <span className="inline-block text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-4">
               {project.category}
             </span>
@@ -109,8 +109,8 @@ const ProjectDetail: React.FC = () => {
             <div className="flex flex-wrap gap-3 mt-8">
               {project.repoUrl && (
                 <a 
-                  href={project.repoUrl}
-                  target="_blank"
+                  href={project.repoUrl} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-200 dark:border-neutral-800 rounded-full text-sm font-medium text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
                 >
@@ -120,8 +120,8 @@ const ProjectDetail: React.FC = () => {
               )}
               {project.demoUrl && (
                 <a 
-                  href={project.demoUrl}
-                  target="_blank"
+                  href={project.demoUrl} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
                 >
@@ -139,11 +139,11 @@ const ProjectDetail: React.FC = () => {
               </Link>
             </div>
           </motion.div>
-        </div>
-      </div>
+            </div>
+          </div>
 
       {/* Image Gallery */}
-      <motion.div 
+          <motion.div 
         className="px-6 mb-20"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -162,8 +162,8 @@ const ProjectDetail: React.FC = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                loading="lazy"
-              />
+              loading="lazy"
+            />
             </AnimatePresence>
 
             {/* Navigation Arrows */}
@@ -228,7 +228,7 @@ const ProjectDetail: React.FC = () => {
               ))}
             </div>
           )}
-        </div>
+          </div>
       </motion.div>
 
       {/* Metrics Grid */}
@@ -339,8 +339,8 @@ const ProjectDetail: React.FC = () => {
                       <p key={i} className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
                         {paragraph.trim()}
                       </p>
-                    ))}
-                  </div>
+                ))}
+              </div>
                 </>
               )}
             </motion.div>

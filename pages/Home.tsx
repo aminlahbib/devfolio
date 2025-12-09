@@ -38,9 +38,9 @@ const Home: React.FC = () => {
       {/* Hero */}
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <p className="text-caption text-neutral-500 dark:text-neutral-400 mb-4">
@@ -60,25 +60,25 @@ const Home: React.FC = () => {
               <Link
                 to="/projects"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-caption font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
-              >
+          >
                 View Work
                 <ArrowRight size={16} />
               </Link>
-              <Link
-                to="/contact"
+          <Link
+            to="/contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-full text-caption font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
-              >
+          >
                 Get in Touch
-              </Link>
+          </Link>
             </div>
-          </motion.div>
+        </motion.div>
         </div>
       </section>
 
       {/* Expertise */}
       <section className="py-20 px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-5xl mx-auto">
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-              ))}
+            ))}
             </div>
           </motion.div>
         </div>
@@ -120,12 +120,12 @@ const Home: React.FC = () => {
               className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors link-underline"
             >
               View all
-            </Link>
-          </div>
+          </Link>
+        </div>
 
           <div className="space-y-px">
             {featuredProjects.map((project, index) => (
-              <motion.div
+        <motion.div 
                 key={project.id}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -133,8 +133,8 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <ProjectCard project={project} variant="list" />
-              </motion.div>
-            ))}
+            </motion.div>
+          ))}
           </div>
         </div>
       </section>
@@ -142,7 +142,7 @@ const Home: React.FC = () => {
       {/* CTA */}
       <section className="py-20 px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-5xl mx-auto">
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 text-neutral-900 dark:text-white font-medium hover:gap-3 transition-all link-underline"
-            >
+                    >
               Start a conversation
               <ArrowUpRight size={18} />
             </Link>

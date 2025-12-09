@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
               Full Stack Engineer
             </p>
           </div>
-
+          
           <nav className="flex flex-wrap gap-6">
             <a href="/#/" className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
               Home
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
               className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               GitHub
-            </a>
+                </a>
             <a 
               href="https://www.linkedin.com/in/amine-lahbib-60877321b/" 
               target="_blank" 
@@ -42,10 +42,10 @@ const Footer: React.FC = () => {
               className="text-caption text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               LinkedIn
-            </a>
+                </a>
           </nav>
         </div>
-
+        
         <div className="mt-12 pt-6 border-t border-neutral-200 dark:border-neutral-800">
           <p className="text-small text-neutral-400 dark:text-neutral-500">
             © {currentYear} Amine Lahbib

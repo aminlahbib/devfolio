@@ -38,22 +38,22 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-14">
           <Link to="/" className="font-semibold text-neutral-900 dark:text-white">
             Amine Lahbib
-          </Link>
+            </Link>
           
           <div className="hidden md:flex items-center gap-6">
-            {links.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
+              {links.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
                 className={`text-caption transition-colors ${
-                  isActive(link.path)
+                    isActive(link.path)
                     ? 'text-neutral-900 dark:text-white'
                     : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             
             <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
             
@@ -67,13 +67,13 @@ const Navbar: React.FC = () => {
               CV
             </a>
             
-            <button 
-              onClick={toggleTheme}
+             <button 
+               onClick={toggleTheme}
               className="p-2 -mr-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
               aria-label="Toggle theme"
-            >
+             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+             </button>
           </div>
 
           <div className="flex md:hidden items-center gap-2">
@@ -87,10 +87,10 @@ const Navbar: React.FC = () => {
               <FileText size={18} />
             </a>
             <button 
-              onClick={toggleTheme}
+               onClick={toggleTheme}
               className="p-2 text-neutral-500"
               aria-label="Toggle theme"
-            >
+             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button
@@ -126,15 +126,15 @@ const Navbar: React.FC = () => {
                   {link.label}
                 </Link>
               ))}
-              <a
+                      <a 
                 href="/cv.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                        target="_blank" 
+                        rel="noopener noreferrer" 
                 className="flex items-center gap-2 py-2 text-body text-neutral-500 dark:text-neutral-400"
-              >
+                      >
                 <FileText size={16} />
                 Download CV
-              </a>
+                      </a>
             </div>
           </motion.div>
         )}

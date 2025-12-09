@@ -43,14 +43,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
       <Link to={`/projects/${project.slug}`} className="block">
         {/* Image */}
         <div className="aspect-[4/3] mb-5 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900">
-          <img
-            src={project.imageUrl}
-            alt={project.title}
-            loading="lazy"
+        <img
+          src={project.imageUrl}
+          alt={project.title}
+          loading="lazy"
             className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-          />
-        </div>
-        
+        />
+      </div>
+      
         {/* Content */}
         <div className="space-y-3">
           {/* Title & Category */}
@@ -59,8 +59,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
               {project.title}
             </h3>
             <span className="flex-shrink-0 px-2.5 py-1 text-[11px] font-medium text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900 rounded-full">
-              {project.category}
-            </span>
+            {project.category}
+          </span>
           </div>
           
           {/* Description */}
@@ -83,7 +83,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
                 +{project.tags.length - 4}
               </span>
             )}
-          </div>
+                  </div>
           
           {/* Metrics Preview */}
           {project.metrics && project.metrics.length > 0 && (
@@ -98,15 +98,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
                   </span>
                 </div>
               ))}
-            </div>
-          )}
+              </div>
+            )}
         </div>
       </Link>
       
       {/* External Links */}
       {(project.repoUrl || project.demoUrl) && (
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-900">
-          {project.repoUrl && (
+            {project.repoUrl && (
             <a 
               href={project.repoUrl}
               target="_blank"
@@ -116,9 +116,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
             >
               <Github size={14} />
               <span>Source</span>
-            </a>
-          )}
-          {project.demoUrl && (
+              </a>
+            )}
+            {project.demoUrl && (
             <a 
               href={project.demoUrl}
               target="_blank"

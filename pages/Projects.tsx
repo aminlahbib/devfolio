@@ -62,12 +62,12 @@ const Projects: React.FC = () => {
 
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <motion.div
+      <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12"
-        >
+        className="mb-12"
+      >
           <h1 className="text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-white tracking-tight mb-4">
             Work
           </h1>
@@ -95,7 +95,7 @@ const Projects: React.FC = () => {
               </div>
             </div>
           )}
-        </motion.div>
+      </motion.div>
 
         {/* Filters */}
         <motion.div
@@ -106,39 +106,39 @@ const Projects: React.FC = () => {
         >
           <div className="flex gap-1 overflow-x-auto pb-2 sm:pb-0">
             {categories.map(cat => (
-              <button
+                <button
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                  filter === cat
+                    filter === cat
                     ? 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900'
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900'
                 }`}
-              >
+                >
                 {cat}
                 {filter === cat && filteredProjects.length > 0 && (
                   <span className="ml-1.5 text-neutral-400 dark:text-neutral-500">
                     ({filteredProjects.length})
-                  </span>
+                </span>
                 )}
-              </button>
-            ))}
-          </div>
-        </motion.div>
+                        </button>
+                    ))}
+                </div>
+            </motion.div>
 
         {/* Loading */}
-        {status === LoadStatus.LOADING && (
+      {status === LoadStatus.LOADING && (
           <div className="flex justify-center py-20">
             <div className="w-6 h-6 border-2 border-neutral-300 dark:border-neutral-700 border-t-neutral-900 dark:border-t-white rounded-full animate-spin" />
-          </div>
-        )}
+        </div>
+      )}
 
         {/* Grid */}
-        {status === LoadStatus.SUCCESS && (
-          <motion.div 
-            layout
+      {status === LoadStatus.SUCCESS && (
+        <motion.div 
+          layout
             className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-14"
-          >
+        >
             {filteredProjects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -149,11 +149,11 @@ const Projects: React.FC = () => {
                 <ProjectCard project={project} variant="grid" />
               </motion.div>
             ))}
-          </motion.div>
-        )}
+        </motion.div>
+      )}
 
         {/* Empty */}
-        {status === LoadStatus.SUCCESS && filteredProjects.length === 0 && (
+      {status === LoadStatus.SUCCESS && filteredProjects.length === 0 && (
           <div className="text-center py-20">
             <p className="text-body text-neutral-500 dark:text-neutral-400 mb-4">
               No projects found in this category.
@@ -169,12 +169,12 @@ const Projects: React.FC = () => {
 
         {/* Technologies Used */}
         {status === LoadStatus.SUCCESS && allTags.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+        <motion.div 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mt-20 pt-12 border-t border-neutral-200 dark:border-neutral-800"
-          >
+        >
             <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
               Technologies Used
             </h2>
@@ -183,13 +183,13 @@ const Projects: React.FC = () => {
                 <span 
                   key={tag} 
                   className="px-3 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900 rounded-full"
-                >
+          >
                   {tag}
                 </span>
               ))}
             </div>
-          </motion.div>
-        )}
+        </motion.div>
+      )}
       </div>
     </div>
   );

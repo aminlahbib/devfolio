@@ -24,10 +24,10 @@ const pageVariants = {
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  
+
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+    <motion.div
         key={location.pathname}
         variants={pageVariants}
         initial="initial"
