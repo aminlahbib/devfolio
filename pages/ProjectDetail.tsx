@@ -13,6 +13,7 @@ const ProjectDetail: React.FC = () => {
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.IDLE);
   const [activeTab, setActiveTab] = useState('overview');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -39,6 +40,35 @@ const ProjectDetail: React.FC = () => {
         ? [project.imageUrl, ...(project.images || [])]
         : (project.images || []))
     : [];
+
+  // Preload images for better performance
+  useEffect(() => {
+    if (images.length === 0) return;
+    
+    // Preload current image
+    const currentImg = new Image();
+    currentImg.src = images[currentImageIndex];
+    
+    // Preload next and previous images
+    const nextIndex = (currentImageIndex + 1) % images.length;
+    const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+    
+    const nextImg = new Image();
+    nextImg.src = images[nextIndex];
+    
+    const prevImg = new Image();
+    prevImg.src = images[prevIndex];
+    
+    // Reset loaded state when image changes
+    setImageLoaded(false);
+    
+    const handleLoad = () => setImageLoaded(true);
+    currentImg.onload = handleLoad;
+    
+    return () => {
+      currentImg.onload = null;
+    };
+  }, [currentImageIndex, images]);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -157,19 +187,25 @@ const ProjectDetail: React.FC = () => {
       >
         <div className="max-w-4xl mx-auto">
           <div className="relative overflow-hidden rounded-2xl bg-transparent shadow-sm">
+            {/* Loading Skeleton */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 w-full h-[400px] bg-neutral-100 dark:bg-neutral-900 rounded-2xl animate-pulse z-0" />
+            )}
+            
             {/* Main Image */}
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentImageIndex}
                 src={images[currentImageIndex]}
                 alt={`${project.title} - Image ${currentImageIndex + 1}`}
-                className="w-full h-auto rounded-2xl"
+                className="w-full h-auto rounded-2xl relative z-10"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={{ opacity: imageLoaded ? 1 : 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-              loading="lazy"
-            />
+                onLoad={() => setImageLoaded(true)}
+                loading="eager"
+              />
             </AnimatePresence>
 
             {/* Navigation Arrows */}
@@ -229,6 +265,7 @@ const ProjectDetail: React.FC = () => {
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                   />
                 </button>
               ))}

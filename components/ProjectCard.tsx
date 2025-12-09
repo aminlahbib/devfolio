@@ -45,11 +45,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
     <article className="group">
       <Link to={`/projects/${project.slug}`} className="block">
         {/* Image */}
-        <div className="aspect-[4/3] mb-5 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900">
+        <div className="aspect-[4/3] mb-5 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900 relative">
         <img
           src={project.imageUrl}
           alt={project.title}
           loading="lazy"
+          decoding="async"
             className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
         />
       </div>
