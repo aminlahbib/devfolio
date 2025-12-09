@@ -433,44 +433,6 @@ const ProjectDetail: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Links */}
-              <div>
-                <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
-                  {t('projectDetail.links')}
-                </h2>
-                <div className="space-y-2">
-                  {project.repoUrl && (
-                    <a 
-                      href={project.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
-                    >
-                      <Github size={16} />
-                      {t('projectDetail.githubRepository')}
-                    </a>
-                  )}
-                  {project.demoUrl && (
-                    <a 
-                      href={project.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
-                    >
-                      <ExternalLink size={16} />
-                      {t('projectDetail.liveDemo')}
-                    </a>
-                  )}
-                  <Link 
-                    to="/contact"
-                    state={{ subject: `Demo Request: ${project.title}` }}
-                    className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-                  >
-                    <Mail size={16} />
-                    {t('projectDetail.requestDemo')}
-                  </Link>
-                </div>
-              </div>
             </motion.aside>
           </div>
         </div>

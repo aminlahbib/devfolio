@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, FileStack } from 'lucide-react';
@@ -17,12 +17,62 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const Home: React.FC = () => {
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
   const { t } = useLanguage();
+
+  // Map technology display names to project tag names
+  const getTagForTechnology = (tech: string, projects: Project[]): string | null => {
+    const techLower = tech.toLowerCase();
+    
+    // Get all unique tags from projects
+    const allTags = new Set<string>();
+    projects.forEach(p => p.tags.forEach(t => allTags.add(t)));
+    
+    // Try exact match first
+    for (const tag of allTags) {
+      if (tag.toLowerCase() === techLower) {
+        return tag;
+      }
+    }
+    
+    // Try partial match (e.g., "React" matches "React 18")
+    for (const tag of allTags) {
+      const tagLower = tag.toLowerCase();
+      // Check if tech name is at the start of tag (e.g., "react" matches "react 18")
+      if (tagLower.startsWith(techLower) || tagLower.includes(techLower)) {
+        // Additional check to avoid false matches
+        const words = tagLower.split(/\s+/);
+        if (words[0] === techLower || words.some(w => w === techLower)) {
+          return tag;
+        }
+      }
+    }
+    
+    // Special mappings for common variations
+    const mappings: Record<string, string> = {
+      'tailwind css': 'Tailwind CSS',
+      'node.js': 'Node.js',
+      'spring boot': 'Spring Boot',
+      'google cloud': 'GCP',
+      'postgresql': 'PostgreSQL',
+    };
+    
+    if (mappings[techLower]) {
+      for (const tag of allTags) {
+        if (tag.toLowerCase().includes(mappings[techLower].toLowerCase())) {
+          return tag;
+        }
+      }
+    }
+    
+    return null;
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
       const response = await projectService.getAll();
       if (response.success && response.data) {
+        setAllProjects(response.data);
         const featured = response.data.filter(p => p.featured).slice(0, 3);
         setFeaturedProjects(featured);
         
@@ -95,22 +145,22 @@ const Home: React.FC = () => {
       />
       
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6">
+      <section className="pt-32 pb-32 px-6">
         <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-caption text-neutral-500 dark:text-neutral-400 mb-4">
+            <p className="text-caption text-neutral-500 dark:text-neutral-400 mb-6">
               {t('home.role')}
             </p>
             
-            <h1 className="text-display text-neutral-900 dark:text-white mb-6 max-w-3xl">
+            <h1 className="text-display text-neutral-900 dark:text-white mb-8 max-w-3xl">
               {t('home.title')}
             </h1>
             
-            <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 leading-relaxed">
+            <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mb-12 leading-relaxed">
               {t('home.subtitle')}
             </p>
 
@@ -134,7 +184,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Expertise */}
-      <section className="py-20 px-6 border-t border-neutral-200 dark:border-neutral-800">
+      <section className="py-32 px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-5xl mx-auto">
           <motion.div 
             initial={{ opacity: 0 }}
@@ -142,13 +192,25 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-10 text-center">
+            <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-16 text-center">
               {t('home.expertise')}
             </h2>
             
-            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
               {technologies.map((tech, index) => {
                 const TechIcon = technologyIcons[tech];
+                const tagForTech = getTagForTechnology(tech, allProjects);
+                const hasProjects = tagForTech !== null;
+                
+                const content = (
+                  <div className={`text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-200 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 flex items-center gap-2 ${hasProjects ? 'cursor-pointer' : 'cursor-default'}`}>
+                    {TechIcon && (
+                      <TechIcon size={16} className="text-neutral-400 dark:text-neutral-500 transition-colors group-hover:text-neutral-600 dark:group-hover:text-neutral-400 flex-shrink-0" />
+                    )}
+                    <span>{tech}</span>
+                  </div>
+                );
+                
                 return (
                   <motion.div
                     key={tech}
@@ -158,12 +220,16 @@ const Home: React.FC = () => {
                     transition={{ duration: 0.4, delay: index * 0.03 }}
                     className="group"
                   >
-                    <div className="text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-200 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 cursor-default flex items-center gap-2">
-                      {TechIcon && (
-                        <TechIcon size={16} className="text-neutral-400 dark:text-neutral-500 transition-colors group-hover:text-neutral-600 dark:group-hover:text-neutral-400 flex-shrink-0" />
-                      )}
-                      <span>{tech}</span>
-                    </div>
+                    {hasProjects ? (
+                      <Link
+                        to={`/projects?tag=${encodeURIComponent(tagForTech)}`}
+                        className="block"
+                      >
+                        {content}
+                      </Link>
+                    ) : (
+                      content
+                    )}
                   </motion.div>
                 );
               })}
@@ -173,9 +239,9 @@ const Home: React.FC = () => {
       </section>
 
       {/* Selected Work */}
-      <section className="py-20 px-6 border-t border-neutral-200 dark:border-neutral-800">
+      <section className="py-32 px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-end justify-between mb-10">
+          <div className="flex items-end justify-between mb-16">
             <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
               {t('home.selectedWork')}
             </h2>
@@ -204,7 +270,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 border-t border-neutral-200 dark:border-neutral-800">
+      <section className="py-32 px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-5xl mx-auto">
           <motion.div 
             initial={{ opacity: 0 }}

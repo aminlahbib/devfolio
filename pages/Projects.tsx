@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 import { projectService } from '../services/api';
 import { Project, LoadStatus } from '../types';
 import ProjectCard from '../components/ProjectCard';
@@ -11,7 +13,11 @@ const Projects: React.FC = () => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.IDLE);
   const [filter, setFilter] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useLanguage();
+  
+  // Get tag filter from URL
+  const tagFilter = searchParams.get('tag') || null;
 
   const categories = [
     { key: 'All', label: t('projects.filter.all') },
@@ -52,13 +58,37 @@ const Projects: React.FC = () => {
     loadProjects();
   }, []);
 
+  // Filter projects by category and/or tag
   useEffect(() => {
-    if (filter === 'All') {
-      setFilteredProjects(projects);
-    } else {
-      setFilteredProjects(projects.filter(p => p.category === filter));
+    let filtered = projects;
+
+    // Apply category filter
+    if (filter !== 'All') {
+      filtered = filtered.filter(p => p.category === filter);
     }
-  }, [filter, projects]);
+
+    // Apply tag filter if present
+    if (tagFilter) {
+      filtered = filtered.filter(p => 
+        p.tags.some(tag => tag.toLowerCase() === tagFilter.toLowerCase())
+      );
+    }
+
+    setFilteredProjects(filtered);
+  }, [filter, tagFilter, projects]);
+
+  // Clear tag filter when category filter changes
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    if (tagFilter) {
+      setSearchParams({});
+    }
+  };
+
+  // Clear tag filter
+  const clearTagFilter = () => {
+    setSearchParams({});
+  };
 
   return (
     <div className="min-h-screen pt-28 pb-20 px-6">
@@ -104,6 +134,28 @@ const Projects: React.FC = () => {
           )}
       </motion.div>
 
+        {/* Active Tag Filter */}
+        {tagFilter && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 rounded-full">
+              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                Filtered by: <span className="font-medium text-neutral-900 dark:text-white">{tagFilter}</span>
+              </span>
+              <button
+                onClick={clearTagFilter}
+                className="ml-1 p-1 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-full transition-colors"
+                aria-label="Clear filter"
+              >
+                <X size={14} className="text-neutral-500 dark:text-neutral-400" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
         {/* Filters */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -115,7 +167,7 @@ const Projects: React.FC = () => {
             {categories.map(cat => (
                 <button
                 key={cat.key}
-                onClick={() => setFilter(cat.key)}
+                onClick={() => handleFilterChange(cat.key)}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
                     filter === cat.key
                     ? 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900'
@@ -166,7 +218,10 @@ const Projects: React.FC = () => {
               {t('projects.empty')}
             </p>
             <button
-              onClick={() => setFilter('All')}
+              onClick={() => {
+                setFilter('All');
+                clearTagFilter();
+              }}
               className="text-sm text-neutral-900 dark:text-white underline underline-offset-4"
             >
               {t('projects.viewAll')}
