@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { Project } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,6 +10,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) => {
+  const { t } = useLanguage();
+  
   if (variant === 'list') {
     return (
       <Link
@@ -43,14 +46,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
       <Link to={`/projects/${project.slug}`} className="block">
         {/* Image */}
         <div className="aspect-[4/3] mb-5 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900">
-          <img
-            src={project.imageUrl}
-            alt={project.title}
-            loading="lazy"
+        <img
+          src={project.imageUrl}
+          alt={project.title}
+          loading="lazy"
             className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-          />
-        </div>
-        
+        />
+      </div>
+      
         {/* Content */}
         <div className="space-y-3">
           {/* Title & Category */}
@@ -59,8 +62,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
               {project.title}
             </h3>
             <span className="flex-shrink-0 px-2.5 py-1 text-[11px] font-medium text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900 rounded-full">
-              {project.category}
-            </span>
+            {project.category}
+          </span>
           </div>
           
           {/* Description */}
@@ -83,7 +86,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
                 +{project.tags.length - 4}
               </span>
             )}
-          </div>
+                  </div>
           
           {/* Metrics Preview */}
           {project.metrics && project.metrics.length > 0 && (
@@ -98,15 +101,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
                   </span>
                 </div>
               ))}
-            </div>
-          )}
+              </div>
+            )}
         </div>
       </Link>
       
       {/* External Links */}
       {(project.repoUrl || project.demoUrl) && (
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-900">
-          {project.repoUrl && (
+            {project.repoUrl && (
             <a 
               href={project.repoUrl}
               target="_blank"
@@ -115,10 +118,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
               className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
             >
               <Github size={14} />
-              <span>Source</span>
-            </a>
-          )}
-          {project.demoUrl && (
+              <span>{t('projectCard.source')}</span>
+              </a>
+            )}
+            {project.demoUrl && (
             <a 
               href={project.demoUrl}
               target="_blank"
@@ -127,7 +130,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
               className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
             >
               <ExternalLink size={14} />
-              <span>Demo</span>
+              <span>{t('projectCard.demo')}</span>
             </a>
           )}
         </div>

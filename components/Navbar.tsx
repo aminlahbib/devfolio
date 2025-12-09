@@ -1,16 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon, FileText } from 'lucide-react';
+import { Menu, X, Sun, Moon, FileText, Globe } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const location = useLocation();
+  const { language, setLanguage, t } = useLanguage();
+  const langMenuRefDesktop = useRef<HTMLDivElement>(null);
+  const langMenuRefMobile = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isClickOutsideDesktop = langMenuRefDesktop.current && !langMenuRefDesktop.current.contains(event.target as Node);
+      const isClickOutsideMobile = langMenuRefMobile.current && !langMenuRefMobile.current.contains(event.target as Node);
+      
+      if (isClickOutsideDesktop && isClickOutsideMobile) {
+        setIsLangMenuOpen(false);
+      }
+    };
+
+    if (isLangMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isLangMenuOpen]);
 
   const toggleTheme = () => {
     if (isDark) {
@@ -27,9 +51,14 @@ const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
 
   const links = [
-    { path: '/', label: 'Home' },
-    { path: '/projects', label: 'Work' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/', label: t('nav.home') },
+    { path: '/projects', label: t('nav.work') },
+    { path: '/contact', label: t('nav.contact') },
+  ];
+
+  const languages = [
+    { code: 'en' as const, label: 'English' },
+    { code: 'de' as const, label: 'Deutsch' },
   ];
 
   return (
@@ -38,22 +67,22 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-14">
           <Link to="/" className="font-semibold text-neutral-900 dark:text-white">
             Amine Lahbib
-          </Link>
+            </Link>
           
           <div className="hidden md:flex items-center gap-6">
-            {links.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
+              {links.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
                 className={`text-caption transition-colors ${
-                  isActive(link.path)
+                    isActive(link.path)
                     ? 'text-neutral-900 dark:text-white'
                     : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             
             <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
             
@@ -64,16 +93,60 @@ const Navbar: React.FC = () => {
               className="inline-flex items-center gap-1.5 text-caption text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
             >
               <FileText size={15} />
-              CV
+              {t('nav.cv')}
             </a>
             
-            <button 
-              onClick={toggleTheme}
+            <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
+            
+            <div className="relative" ref={langMenuRefDesktop}>
+              <button
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                className="p-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+                aria-label="Select language"
+              >
+                <Globe size={18} />
+              </button>
+              
+              <AnimatePresence>
+                {isLangMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-2 w-36 bg-white dark:bg-neutral-900 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden z-50"
+                  >
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setIsLangMenuOpen(false);
+                        }}
+                        className={`w-full px-4 py-2.5 text-left text-sm flex items-center justify-between transition-colors ${
+                          language === lang.code
+                            ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-medium'
+                            : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                        }`}
+                      >
+                        <span>{lang.label}</span>
+                        {language === lang.code && (
+                          <span className="text-xs font-medium">✓</span>
+                        )}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            
+             <button 
+               onClick={toggleTheme}
               className="p-2 -mr-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
-              aria-label="Toggle theme"
-            >
+              aria-label={t('nav.toggleTheme')}
+             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+             </button>
           </div>
 
           <div className="flex md:hidden items-center gap-2">
@@ -82,15 +155,56 @@ const Navbar: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-neutral-500"
-              aria-label="View CV"
+              aria-label={t('nav.downloadCv')}
             >
               <FileText size={18} />
             </a>
+            <div className="relative" ref={langMenuRefMobile}>
+              <button
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                className="p-2 text-neutral-500"
+                aria-label="Select language"
+              >
+                <Globe size={18} />
+              </button>
+              
+              <AnimatePresence>
+                {isLangMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-2 w-36 bg-white dark:bg-neutral-900 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden z-50"
+                  >
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setIsLangMenuOpen(false);
+                        }}
+                        className={`w-full px-4 py-2.5 text-left text-sm flex items-center justify-between transition-colors ${
+                          language === lang.code
+                            ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-medium'
+                            : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                        }`}
+                      >
+                        <span>{lang.label}</span>
+                        {language === lang.code && (
+                          <span className="text-xs font-medium">✓</span>
+                        )}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <button 
-              onClick={toggleTheme}
+               onClick={toggleTheme}
               className="p-2 text-neutral-500"
-              aria-label="Toggle theme"
-            >
+              aria-label={t('nav.toggleTheme')}
+             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button
@@ -126,15 +240,15 @@ const Navbar: React.FC = () => {
                   {link.label}
                 </Link>
               ))}
-              <a
+                      <a 
                 href="/cv.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                        target="_blank" 
+                        rel="noopener noreferrer" 
                 className="flex items-center gap-2 py-2 text-body text-neutral-500 dark:text-neutral-400"
-              >
+                      >
                 <FileText size={16} />
-                Download CV
-              </a>
+                {t('nav.downloadCv')}
+                      </a>
             </div>
           </motion.div>
         )}

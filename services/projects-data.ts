@@ -12,7 +12,7 @@ export const projects: Project[] = [
     title: 'Cloud Secrets Manager',
     shortDescription: 'Enterprise-grade secrets management platform with 3-tier microservices architecture, complete observability stack, and security-first design.',
     fullDescription: `Architected and developed an enterprise-grade secrets management platform demonstrating end-to-end ownership from design to deployment.
-
+      
 The platform features a 3-tier microservices architecture with specialized services: Secret Service for core credential management, Audit Service for compliance logging, and Notification Service for real-time alerts. All services communicate via event-driven architecture using Google Pub/Sub.
 
 Security is implemented at every layer: AES-256-GCM encryption for secrets at rest, TOTP-based two-factor authentication with recovery codes, JWT authentication with refresh tokens, role-based access control with 5 permission levels, and Workload Identity for zero service account keys.
@@ -239,7 +239,7 @@ Services communicate via REST APIs with JWT token propagation for authentication
     title: 'Real-time AI TTS System',
     shortDescription: 'High-performance text-to-speech system built with Rust achieving sub-millisecond latency, featuring WebSocket streaming and hybrid cloud deployment.',
     fullDescription: `A high-performance text-to-speech and AI chat system demonstrating expertise in systems programming, real-time streaming, and cloud deployment.
-
+      
 The backend is built with Rust using the Axum framework on top of Tokio async runtime. Rust was chosen for consistent sub-millisecond latency, memory safety without garbage collection pauses, and excellent concurrency for handling multiple simultaneous audio streams.
 
 The system implements WebSocket protocols for bidirectional real-time communication, combined with client-side Voice Activity Detection (VAD). This architecture reduces latency by 40% compared to standard REST polling by eliminating request/response overhead and enabling true streaming.
@@ -274,7 +274,7 @@ The frontend is intentionally built with vanilla JavaScript (ES6+) and Web Audio
       'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1200&h=800&fit=crop'
     ],
     repoUrl: 'https://github.com/aminlahbib/TTS-Project',
-    demoUrl: 'https://tts-project-two.vercel.app',
+    demoUrl: 'https://tts-project-two.vercel.app', 
     featured: true,
     metrics: [
       { label: 'Latency', value: 'Sub-ms' },

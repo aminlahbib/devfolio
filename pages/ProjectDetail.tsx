@@ -5,6 +5,7 @@ import { ArrowLeft, Github, ExternalLink, Check, ChevronLeft, ChevronRight, Play
 import { projectService } from '../services/api';
 import { Project, LoadStatus } from '../types';
 import SEO from '../components/SEO';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ProjectDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -12,6 +13,7 @@ const ProjectDetail: React.FC = () => {
   const [status, setStatus] = useState<LoadStatus>(LoadStatus.IDLE);
   const [activeTab, setActiveTab] = useState('overview');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadProject = async () => {
@@ -54,9 +56,9 @@ const ProjectDetail: React.FC = () => {
     return (
       <div className="min-h-screen pt-28 px-6 text-center">
         <SEO title="Not Found" description="Project not found." />
-        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">Project not found</h2>
+        <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">{t('projectDetail.notFound')}</h2>
         <Link to="/projects" className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
-          ← Back to work
+          {t('projectDetail.backToWork')}
         </Link>
       </div>
     );
@@ -86,15 +88,15 @@ const ProjectDetail: React.FC = () => {
               className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors mb-12"
             >
               <ArrowLeft size={16} />
-              All Projects
-            </Link>
+              {t('projectDetail.backToProjects')}
+        </Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
             <span className="inline-block text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-4">
               {project.category}
             </span>
@@ -109,24 +111,24 @@ const ProjectDetail: React.FC = () => {
             <div className="flex flex-wrap gap-3 mt-8">
               {project.repoUrl && (
                 <a 
-                  href={project.repoUrl}
-                  target="_blank"
+                  href={project.repoUrl} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-200 dark:border-neutral-800 rounded-full text-sm font-medium text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
                 >
                   <Github size={18} />
-                  View Repository
+                  {t('projectDetail.viewRepository')}
                 </a>
               )}
               {project.demoUrl && (
                 <a 
-                  href={project.demoUrl}
-                  target="_blank"
+                  href={project.demoUrl} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
                 >
                   <ExternalLink size={18} />
-                  Live Demo
+                  {t('projectDetail.liveDemo')}
                 </a>
               )}
               <Link
@@ -135,15 +137,15 @@ const ProjectDetail: React.FC = () => {
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors"
               >
                 <Play size={18} />
-                Request a Demo
+                {t('projectDetail.requestDemo')}
               </Link>
             </div>
           </motion.div>
-        </div>
-      </div>
+            </div>
+          </div>
 
       {/* Image Gallery */}
-      <motion.div 
+          <motion.div 
         className="px-6 mb-20"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -162,8 +164,8 @@ const ProjectDetail: React.FC = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                loading="lazy"
-              />
+              loading="lazy"
+            />
             </AnimatePresence>
 
             {/* Navigation Arrows */}
@@ -228,7 +230,7 @@ const ProjectDetail: React.FC = () => {
               ))}
             </div>
           )}
-        </div>
+          </div>
       </motion.div>
 
       {/* Metrics Grid */}
@@ -332,15 +334,15 @@ const ProjectDetail: React.FC = () => {
                 // Fallback to full description if no tabs
                 <>
                   <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-6">
-                    Overview
+                    {t('projectDetail.overview')}
                   </h2>
                   <div className="space-y-6">
                     {project.fullDescription.trim().split('\n\n').filter(p => p.trim()).map((paragraph, i) => (
                       <p key={i} className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
                         {paragraph.trim()}
                       </p>
-                    ))}
-                  </div>
+                ))}
+              </div>
                 </>
               )}
             </motion.div>
@@ -356,7 +358,7 @@ const ProjectDetail: React.FC = () => {
               {project.usedBy && project.usedBy.length > 0 && (
                 <div>
                   <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
-                    Key Highlights
+                    {t('projectDetail.keyHighlights')}
                   </h2>
                   <ul className="space-y-3">
                     {project.usedBy.map((item, i) => (
@@ -376,7 +378,7 @@ const ProjectDetail: React.FC = () => {
               {/* Technologies */}
               <div>
                 <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
-                  Tech Stack
+                  {t('projectDetail.techStack')}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map(tag => (
@@ -393,7 +395,7 @@ const ProjectDetail: React.FC = () => {
               {/* Quick Links */}
               <div>
                 <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">
-                  Links
+                  {t('projectDetail.links')}
                 </h2>
                 <div className="space-y-2">
                   {project.repoUrl && (
@@ -404,7 +406,7 @@ const ProjectDetail: React.FC = () => {
                       className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                     >
                       <Github size={16} />
-                      GitHub Repository
+                      {t('projectDetail.githubRepository')}
                     </a>
                   )}
                   {project.demoUrl && (
@@ -415,7 +417,7 @@ const ProjectDetail: React.FC = () => {
                       className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                     >
                       <ExternalLink size={16} />
-                      Live Demo
+                      {t('projectDetail.liveDemo')}
                     </a>
                   )}
                   <Link 
@@ -424,7 +426,7 @@ const ProjectDetail: React.FC = () => {
                     className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                   >
                     <Mail size={16} />
-                    Request a Demo
+                    {t('projectDetail.requestDemo')}
                   </Link>
                 </div>
               </div>
@@ -444,10 +446,10 @@ const ProjectDetail: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-1">
-                Interested in this project?
+                {t('projectDetail.interested')}
               </h3>
               <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Let's discuss how I can help with your project.
+                {t('projectDetail.interestedDescription')}
               </p>
             </div>
             <div className="flex gap-3">
@@ -457,13 +459,13 @@ const ProjectDetail: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors"
               >
                 <Play size={16} />
-                Request Demo
+                {t('projectDetail.requestDemo')}
               </Link>
               <Link 
                 to="/contact"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
               >
-                Get in Touch
+                {t('projectDetail.getInTouch')}
               </Link>
             </div>
           </div>
