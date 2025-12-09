@@ -49,16 +49,16 @@ const AnimatedRoutes = () => {
 const App: React.FC = () => {
   return (
     <LanguageProvider>
-      <HashRouter>
-        <div className="flex flex-col min-h-screen">
-          <ScrollToTop />
-          <Navbar />
-          <main className="flex-grow">
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </div>
-      </HashRouter>
+    <HashRouter>
+      <div className="flex flex-col min-h-screen">
+        <ScrollToTop />
+        <Navbar />
+        <main className="flex-grow">
+          <AnimatedRoutes />
+        </main>
+        <Footer />
+      </div>
+    </HashRouter>
     </LanguageProvider>
   );
 };
