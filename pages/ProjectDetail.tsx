@@ -151,7 +151,7 @@ const ProjectDetail: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
       >
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-900 shadow-sm">
             {/* Main Image */}
             <AnimatePresence mode="wait">
@@ -209,7 +209,7 @@ const ProjectDetail: React.FC = () => {
 
           {/* Thumbnail Strip */}
           {images.length > 1 && (
-            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+            <div className="flex gap-2 mt-4 overflow-x-auto py-3 px-2">
               {images.map((img, index) => (
                 <button
                   key={index}
