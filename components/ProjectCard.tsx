@@ -16,27 +16,37 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
     return (
       <Link
         to={`/projects/${project.slug}`}
-        className="group block py-6 border-b border-neutral-200 dark:border-neutral-800 first:border-t"
+        className="group block py-8 border-b border-neutral-200 dark:border-neutral-800 first:border-t relative overflow-hidden transition-all duration-200 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/20"
       >
-        <div className="flex items-start justify-between gap-8">
+        {/* Subtle background gradient on hover */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-50/0 to-neutral-50/50 dark:via-neutral-900/0 dark:to-neutral-900/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        
+        <div className="flex items-start justify-between gap-8 relative z-10">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-title text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
+            <div className="flex items-center gap-3 mb-3">
+              <h3 className="text-title text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors duration-200 relative">
                 {project.title}
+                {/* Subtle underline on hover */}
+                <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover:w-full transition-all duration-300 ease-out"></span>
               </h3>
-              <span className="text-small text-neutral-400 dark:text-neutral-500 font-mono">
+              <span className="text-small text-neutral-400 dark:text-neutral-500 font-mono group-hover:text-neutral-600 dark:group-hover:text-neutral-400 transition-colors duration-200 px-2 py-0.5 rounded group-hover:bg-neutral-100 dark:group-hover:bg-neutral-800/50">
                 {project.category}
               </span>
             </div>
-            <p className="text-body text-neutral-600 dark:text-neutral-400 line-clamp-2 max-w-2xl">
+            <p className="text-body text-neutral-600 dark:text-neutral-400 line-clamp-2 max-w-2xl group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors duration-200 leading-relaxed">
               {project.shortDescription}
             </p>
           </div>
-          <ArrowUpRight 
-            size={20} 
-            className="flex-shrink-0 text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors mt-1" 
-          />
+          <div className="flex-shrink-0 mt-1 relative">
+            <div className="absolute inset-0 rounded-full bg-neutral-900/5 dark:bg-white/5 scale-0 group-hover:scale-150 transition-transform duration-300 opacity-0 group-hover:opacity-100"></div>
+            <ArrowUpRight 
+              size={20} 
+              className="relative text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" 
+            />
+          </div>
         </div>
+        {/* Hover indicator line - more refined */}
+        <div className="absolute bottom-0 left-0 h-px bg-neutral-900 dark:bg-white w-0 group-hover:w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
       </Link>
     );
   }
@@ -51,7 +61,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
           alt={project.title}
           loading="lazy"
           decoding="async"
-            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
         />
       </div>
       

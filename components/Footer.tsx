@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
   }, []);
 
   const getIcon = (label: string) => {
-    const iconClass = "h-6 w-6 text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white transition-all duration-300 group-hover:scale-110";
+    const iconClass = "h-6 w-6 text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white transition-all duration-150 group-hover:scale-110";
     switch (label) {
       case 'Github':
         return <SiGithub className={iconClass} />;
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:gap-16">
           
@@ -53,14 +53,14 @@ const Footer: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.25 }}
           >
             <div className="space-y-5">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                transition={{ duration: 0.25, delay: 0.05 }}
               >
                 <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-1.5">
                   Amine Lahbib
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.25, delay: 0.1 }}
               >
                 <a 
                   href="https://www.linkedin.com/in/amine-lahbib-60877321b/"
@@ -111,13 +111,13 @@ const Footer: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.25, delay: 0.15 }}
             >
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
               </span>
-              <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+              <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors duration-150 uppercase tracking-wide">
                 AVAILABLE FOR WORK
               </span>
             </motion.div>
@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.25, delay: 0.1 }}
           >
             {/* Navigate */}
             <motion.div 
@@ -137,40 +137,40 @@ const Footer: React.FC = () => {
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.25, delay: 0.15 }}
             >
               <h4 className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Navigate</h4>
               <ul className="space-y-2.5">
                 <li>
                   <Link 
                     to="/" 
-                    className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-300 block w-fit group/link"
+                    className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-150 block w-fit group/link"
                   >
                     <span className="relative">
                       {t('nav.home')}
-                      <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-300"></span>
+                      <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-150"></span>
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link 
                     to="/projects" 
-                    className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-300 block w-fit group/link"
+                    className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-150 block w-fit group/link"
                   >
                     <span className="relative">
                       {t('nav.work')}
-                      <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-300"></span>
+                      <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-150"></span>
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link 
                     to="/contact" 
-                    className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-300 block w-fit group/link"
+                    className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-150 block w-fit group/link"
                   >
                     <span className="relative">
                       {t('nav.contact')}
-                      <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-300"></span>
+                      <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-150"></span>
                     </span>
                   </Link>
                 </li>
@@ -184,7 +184,7 @@ const Footer: React.FC = () => {
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                transition={{ duration: 0.25, delay: 0.2 }}
               >
                 <h4 className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Projects</h4>
                 <ul className="space-y-2.5">
@@ -194,15 +194,15 @@ const Footer: React.FC = () => {
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                      transition={{ duration: 0.2, delay: 0.25 + index * 0.05 }}
                     >
                       <Link
                         to={`/projects/${project.slug}`}
-                        className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-300 block w-fit group/link"
+                        className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 transition-all duration-150 block w-fit group/link"
                       >
                         <span className="relative">
                           {project.title}
-                          <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-300"></span>
+                          <span className="absolute bottom-0 left-0 w-0 h-px bg-neutral-900 dark:bg-white group-hover/link:w-full transition-all duration-150"></span>
                         </span>
                       </Link>
                     </motion.li>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon, FileText, Globe } from 'lucide-react';
+import { Menu, X, Sun, Moon, FileText, Globe, Terminal } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -8,13 +8,43 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
   const location = useLocation();
   const { language, setLanguage, t } = useLanguage();
   const langMenuRefDesktop = useRef<HTMLDivElement>(null);
   const langMenuRefMobile = useRef<HTMLDivElement>(null);
+  
+  const text = 'devfolio';
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  // SSH-style typing animation
+  useEffect(() => {
+    setDisplayedText('');
+    let currentIndex = 0;
+    
+    const typeInterval = setInterval(() => {
+      if (currentIndex < text.length) {
+        setDisplayedText(text.slice(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typeInterval);
+      }
+    }, 80);
+
+    return () => clearInterval(typeInterval);
+  }, []);
+
+  // Blinking cursor animation
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 530);
+
+    return () => clearInterval(cursorInterval);
   }, []);
 
   useEffect(() => {
@@ -65,8 +95,12 @@ const Navbar: React.FC = () => {
     <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-200/50 dark:border-neutral-800/50">
       <div className="max-w-5xl mx-auto px-6">
         <div className="relative flex items-center justify-between h-16">
-          <Link to="/" className="text-base font-medium text-neutral-900 dark:text-white hover:opacity-80 transition-opacity">
-            Amine Lahbib
+          <Link to="/" className="flex items-center gap-2 text-base font-mono font-medium text-neutral-900 dark:text-white hover:opacity-80 transition-opacity group">
+            <Terminal size={18} className="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+            <span className="inline-block">
+              {displayedText}
+              <span className={`inline-block w-0.5 h-4 ml-0.5 bg-neutral-900 dark:bg-white transition-opacity duration-300 ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
+            </span>
           </Link>
           
           {/* Centered Navigation Links */}
