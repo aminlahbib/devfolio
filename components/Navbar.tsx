@@ -62,41 +62,43 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-200 dark:border-neutral-800">
+    <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-200/50 dark:border-neutral-800/50">
       <div className="max-w-5xl mx-auto px-6">
-        <div className="flex items-center justify-between h-14">
-          <Link to="/" className="font-semibold text-neutral-900 dark:text-white">
+        <div className="relative flex items-center justify-between h-16">
+          <Link to="/" className="text-base font-medium text-neutral-900 dark:text-white hover:opacity-80 transition-opacity">
             Amine Lahbib
-            </Link>
+          </Link>
           
-          <div className="hidden md:flex items-center gap-6">
-              {links.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                className={`text-caption transition-colors ${
-                    isActive(link.path)
-                    ? 'text-neutral-900 dark:text-white'
+          {/* Centered Navigation Links */}
+          <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+            {links.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-3 py-2 text-sm transition-colors ${
+                  isActive(link.path)
+                    ? 'text-neutral-900 dark:text-white font-medium'
                     : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            
-            <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
-            
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          
+          {/* Right Side Actions */}
+          <div className="hidden md:flex items-center gap-1">
             <a
               href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-caption text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
             >
-              <FileText size={15} />
-              {t('nav.cv')}
+              <FileText size={16} className="flex-shrink-0" />
+              <span>{t('nav.cv')}</span>
             </a>
             
-            <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
+            <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800 mx-1" />
             
             <div className="relative" ref={langMenuRefDesktop}>
               <button
@@ -140,29 +142,30 @@ const Navbar: React.FC = () => {
               </AnimatePresence>
             </div>
             
-             <button 
-               onClick={toggleTheme}
-              className="p-2 -mr-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+            <button 
+              onClick={toggleTheme}
+              className="p-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
               aria-label={t('nav.toggleTheme')}
-             >
+            >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
-             </button>
+            </button>
           </div>
 
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-1">
             <a
               href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-neutral-500"
+              className="p-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
               aria-label={t('nav.downloadCv')}
             >
               <FileText size={18} />
             </a>
+            <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
             <div className="relative" ref={langMenuRefMobile}>
               <button
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                className="p-2 text-neutral-500"
+                className="p-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 aria-label="Select language"
               >
                 <Globe size={18} />
@@ -201,15 +204,16 @@ const Navbar: React.FC = () => {
               </AnimatePresence>
             </div>
             <button 
-               onClick={toggleTheme}
-              className="p-2 text-neutral-500"
+              onClick={toggleTheme}
+              className="p-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
               aria-label={t('nav.toggleTheme')}
-             >
+            >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
+            <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-800" />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 -mr-2 text-neutral-500"
+              className="p-2 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

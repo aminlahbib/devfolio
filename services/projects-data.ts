@@ -154,6 +154,238 @@ All services communicate asynchronously via Google Pub/Sub for loose coupling an
     ]
   },
   {
+    id: '4',
+    slug: 'equipment-management-system',
+    title: 'Equipment Management System',
+    shortDescription: 'Cloud-native equipment loan management with Spring Boot, featuring 60% Docker optimization and production-ready Kubernetes deployment.',
+    fullDescription: `A cloud-native equipment loan management system demonstrating the complete journey from application development to production Kubernetes deployment.
+
+The backend is a RESTful API built with Spring Boot serving 10+ endpoints for equipment inventory, user management, and loan tracking. Security is implemented with JWT authentication, BCrypt password hashing, and comprehensive CORS configuration.
+
+The application showcases container optimization techniques. Through multi-stage Docker builds, careful dependency management, and proper base image selection, the final image size was reduced by 60% (from 500MB to 200MB), significantly improving deployment times and resource usage.
+
+Kubernetes deployment includes:
+• Deployments with 3 replicas for high availability
+• Services for internal networking and load balancing
+• ConfigMaps and Secrets for configuration management
+• Persistent Volume Claims for MySQL data durability
+• Liveness and readiness probes for zero-downtime deployments
+• Resource limits and requests for cluster efficiency
+• Horizontal Pod Autoscaler configuration
+
+Container security best practices include non-root user execution, read-only root filesystem where possible, image vulnerability scanning, and proper secret management.
+
+Comprehensive documentation covers the entire deployment workflow: local development with Docker Compose, deployment to Minikube for testing, and guides for production deployment to AWS EKS or GCP GKE.`,
+    tags: [
+      'Java 17',
+      'Spring Boot',
+      'Spring Security',
+      'Spring Data JPA',
+      'MySQL',
+      'Docker',
+      'Kubernetes',
+      'NGINX',
+      'JWT',
+      'Maven',
+      'ConfigMaps',
+      'PVC'
+    ],
+    category: 'Full Stack',
+    imageUrl: '/images/projects/equipment-management-system/main.png',
+    images: [
+      '/images/projects/equipment-management-system/1.png',
+      '/images/projects/equipment-management-system/2.png'
+    ],
+    repoUrl: 'https://github.com/aminlahbib/Equipment-Managment-System',
+    demoUrl: '',
+    featured: true,
+    metrics: [
+      { label: 'Image Size', value: '-60%' },
+      { label: 'Endpoints', value: '10+' },
+      { label: 'K8s Replicas', value: '3' },
+      { label: 'Tables', value: '4' },
+      { label: 'Guides', value: '15+' }
+    ],
+    usedBy: [
+      'Multi-stage Docker builds for 60% size reduction',
+      'Kubernetes with HPA and health probes',
+      'JWT authentication with BCrypt',
+      'Production-ready for EKS/GKE deployment',
+      'Comprehensive deployment documentation'
+    ],
+    tabs: [
+      {
+        id: 'overview',
+        label: 'Overview',
+        content: `A cloud-native equipment loan management system for tracking equipment inventory, managing user access, and recording loan history.
+
+The platform enables organizations to manage their equipment assets efficiently, with features for checking equipment in/out, tracking loan history, and managing user permissions.
+
+Built with DevOps best practices, the system is designed for production Kubernetes deployment with high availability and scalability.`
+      },
+      {
+        id: 'architecture',
+        label: 'Architecture',
+        content: `The system follows a cloud-native architecture:
+
+**Backend**: Spring Boot REST API with 10+ endpoints for equipment, users, and loans.
+
+**Database**: MySQL with 4 normalized tables, managed via Spring Data JPA.
+
+**Authentication**: JWT-based with BCrypt password hashing, refresh tokens, and role-based access.
+
+**Frontend**: Vanilla JavaScript with responsive design for desktop and mobile.
+
+**Containerization**: Multi-stage Docker builds optimized for size and security.`
+      },
+      {
+        id: 'kubernetes',
+        label: 'Kubernetes',
+        content: `Production-ready Kubernetes deployment configuration:
+
+**Workloads**: Deployments with 3 replicas, rolling update strategy
+
+**Networking**: ClusterIP services, Ingress with TLS termination
+
+**Configuration**: ConfigMaps for app config, Secrets for credentials
+
+**Storage**: PersistentVolumeClaims for MySQL data durability
+
+**Scaling**: HorizontalPodAutoscaler based on CPU/memory
+
+**Health**: Liveness and readiness probes for zero-downtime
+
+**Security**: Non-root containers, resource limits, network policies`
+      },
+      {
+        id: 'optimization',
+        label: 'Optimization',
+        content: `Container optimization techniques achieving 60% size reduction:
+
+**Multi-stage Builds**: Separate build and runtime stages, only copying necessary artifacts.
+
+**Base Image Selection**: Using distroless or Alpine-based images for minimal footprint.
+
+**Dependency Management**: Careful analysis of dependencies, excluding test and development tools.
+
+**Layer Optimization**: Ordering Dockerfile instructions for maximum cache utilization.
+
+**Result**: Image reduced from 500MB to 200MB, faster pulls and deployments, reduced attack surface.`
+      }
+    ]
+  },
+  {
+    id: '3',
+    slug: 'real-time-ai-tts-system',
+    title: 'Real-time AI TTS System',
+    shortDescription: 'High-performance text-to-speech system built with Rust achieving sub-millisecond latency, featuring WebSocket streaming and hybrid cloud deployment.',
+    fullDescription: `A high-performance text-to-speech and AI chat system demonstrating expertise in systems programming, real-time streaming, and cloud deployment.
+      
+The backend is built with Rust using the Axum framework on top of Tokio async runtime. Rust was chosen for consistent sub-millisecond latency, memory safety without garbage collection pauses, and excellent concurrency for handling multiple simultaneous audio streams.
+
+The system implements WebSocket protocols for bidirectional real-time communication, combined with client-side Voice Activity Detection (VAD). This architecture reduces latency by 40% compared to standard REST polling by eliminating request/response overhead and enabling true streaming.
+
+Deployment uses a hybrid cloud strategy optimized for both edge performance and compute requirements:
+• Frontend deployed on Vercel's Global CDN for <50ms load times worldwide
+• Backend containerized and deployed on Railway, handling ~1.5GB of embedded AI models
+• Dynamic backend URL injection at build time for environment flexibility
+
+A significant challenge was cross-platform deployment: developing on an M-series Mac (ARM) but deploying to AMD64 servers. This was solved by setting up a cross-compilation workflow for Docker images, ensuring consistent builds across architectures.
+
+The frontend is intentionally built with vanilla JavaScript (ES6+) and Web Audio API for audio visualizations, demonstrating that complex real-time applications don't require heavy frameworks.`,
+    tags: [
+      'Rust',
+      'Axum',
+      'Tokio',
+      'WebSocket',
+      'Docker',
+      'JavaScript ES6',
+      'Web Audio API',
+      'Vercel',
+      'Railway',
+      'VAD',
+      'Real-time Streaming',
+      'Cross-compilation'
+    ],
+    category: 'Full Stack',
+    imageUrl: '/images/projects/real-time-ai-tts-system/main.png',
+    images: [
+      '/images/projects/real-time-ai-tts-system/1.png',
+      '/images/projects/real-time-ai-tts-system/2.png',
+      '/images/projects/real-time-ai-tts-system/3.png',
+      '/images/projects/real-time-ai-tts-system/4.png',
+      '/images/projects/real-time-ai-tts-system/5.png'
+    ],
+    repoUrl: 'https://github.com/aminlahbib/TTS-Project',
+    demoUrl: 'https://tts-project-two.vercel.app', 
+    featured: true,
+    metrics: [
+      { label: 'Latency', value: 'Sub-ms' },
+      { label: 'Improvement', value: '40%' },
+      { label: 'Model Size', value: '1.5GB' },
+      { label: 'Frontend Deps', value: '0' },
+      { label: 'Global CDN', value: 'Yes' }
+    ],
+    usedBy: [
+      'Sub-millisecond latency with Rust/Tokio',
+      'WebSocket + VAD for 40% latency reduction',
+      'Hybrid cloud: Vercel CDN + Railway compute',
+      'Cross-compilation for ARM to AMD64 deployment',
+      'Zero-dependency vanilla JS frontend'
+    ],
+    tabs: [
+      {
+        id: 'overview',
+        label: 'Overview',
+        content: `A high-performance text-to-speech and AI chat system with real-time audio streaming capabilities.
+
+The system converts text to natural-sounding speech in real-time, enabling voice-based AI interactions. Users can have conversations with AI assistants through voice, with responses streamed as audio.
+
+Built for low latency and high reliability, the system handles multiple concurrent users while maintaining consistent performance.`
+      },
+      {
+        id: 'architecture',
+        label: 'Architecture',
+        content: `The system uses a hybrid cloud architecture:
+
+**Backend (Rust/Axum)**: Handles TTS generation, LLM inference, WebSocket connections. Built on Tokio async runtime for high concurrency.
+
+**Frontend (Vanilla JS)**: Zero-dependency implementation using Web Audio API for audio playback and visualization.
+
+**Deployment Strategy**:
+- Frontend on Vercel's Global CDN for <50ms load times
+- Backend on Railway with ~1.5GB embedded AI models
+- Dynamic URL injection for environment flexibility`
+      },
+      {
+        id: 'performance',
+        label: 'Performance',
+        content: `Performance optimizations achieved 40% latency reduction:
+
+**WebSocket Streaming**: Replaced REST polling with bidirectional WebSocket communication, eliminating request/response overhead.
+
+**Voice Activity Detection**: Client-side VAD detects when users stop speaking, enabling immediate response without waiting for silence timeout.
+
+**Rust Benefits**: Zero garbage collection pauses, predictable performance, excellent async handling with Tokio.
+
+**Result**: Consistent sub-millisecond server latency, enabling natural conversational flow.`
+      },
+      {
+        id: 'challenges',
+        label: 'Challenges',
+        content: `Key technical challenges solved:
+
+**Cross-Platform Deployment**: Developing on M-series Mac (ARM) but deploying to AMD64 servers. Solved with cross-compilation workflow for Docker images.
+
+**Model Embedding**: ~1.5GB of AI models needed to be containerized efficiently. Used multi-stage builds and layer caching.
+
+**Audio Streaming**: Real-time audio requires careful buffer management. Implemented streaming with proper chunking and client-side buffering.
+
+**Environment Flexibility**: Dynamic backend URL injection at build time allows deploying to different environments without code changes.`
+      }
+    ]
+  },
+  {
     id: '2',
     slug: 'supreme-bus',
     title: 'Supreme Bus',
@@ -282,238 +514,6 @@ Services communicate via REST APIs with JWT token propagation for authentication
 **Deployment**: Single command (docker-compose up) brings up the entire stack
 
 **Monitoring**: Health endpoints, structured logging, centralized error handling`
-      }
-    ]
-  },
-  {
-    id: '3',
-    slug: 'real-time-ai-tts-system',
-    title: 'Real-time AI TTS System',
-    shortDescription: 'High-performance text-to-speech system built with Rust achieving sub-millisecond latency, featuring WebSocket streaming and hybrid cloud deployment.',
-    fullDescription: `A high-performance text-to-speech and AI chat system demonstrating expertise in systems programming, real-time streaming, and cloud deployment.
-      
-The backend is built with Rust using the Axum framework on top of Tokio async runtime. Rust was chosen for consistent sub-millisecond latency, memory safety without garbage collection pauses, and excellent concurrency for handling multiple simultaneous audio streams.
-
-The system implements WebSocket protocols for bidirectional real-time communication, combined with client-side Voice Activity Detection (VAD). This architecture reduces latency by 40% compared to standard REST polling by eliminating request/response overhead and enabling true streaming.
-
-Deployment uses a hybrid cloud strategy optimized for both edge performance and compute requirements:
-• Frontend deployed on Vercel's Global CDN for <50ms load times worldwide
-• Backend containerized and deployed on Railway, handling ~1.5GB of embedded AI models
-• Dynamic backend URL injection at build time for environment flexibility
-
-A significant challenge was cross-platform deployment: developing on an M-series Mac (ARM) but deploying to AMD64 servers. This was solved by setting up a cross-compilation workflow for Docker images, ensuring consistent builds across architectures.
-
-The frontend is intentionally built with vanilla JavaScript (ES6+) and Web Audio API for audio visualizations, demonstrating that complex real-time applications don't require heavy frameworks.`,
-    tags: [
-      'Rust',
-      'Axum',
-      'Tokio',
-      'WebSocket',
-      'Docker',
-      'JavaScript ES6',
-      'Web Audio API',
-      'Vercel',
-      'Railway',
-      'VAD',
-      'Real-time Streaming',
-      'Cross-compilation'
-    ],
-    category: 'Full Stack',
-    imageUrl: '/images/projects/real-time-ai-tts-system/main.png',
-    images: [
-      '/images/projects/real-time-ai-tts-system/1.png',
-      '/images/projects/real-time-ai-tts-system/2.png',
-      '/images/projects/real-time-ai-tts-system/3.png',
-      '/images/projects/real-time-ai-tts-system/4.png',
-      '/images/projects/real-time-ai-tts-system/5.png'
-    ],
-    repoUrl: 'https://github.com/aminlahbib/TTS-Project',
-    demoUrl: 'https://tts-project-two.vercel.app', 
-    featured: true,
-    metrics: [
-      { label: 'Latency', value: 'Sub-ms' },
-      { label: 'Improvement', value: '40%' },
-      { label: 'Model Size', value: '1.5GB' },
-      { label: 'Frontend Deps', value: '0' },
-      { label: 'Global CDN', value: 'Yes' }
-    ],
-    usedBy: [
-      'Sub-millisecond latency with Rust/Tokio',
-      'WebSocket + VAD for 40% latency reduction',
-      'Hybrid cloud: Vercel CDN + Railway compute',
-      'Cross-compilation for ARM to AMD64 deployment',
-      'Zero-dependency vanilla JS frontend'
-    ],
-    tabs: [
-      {
-        id: 'overview',
-        label: 'Overview',
-        content: `A high-performance text-to-speech and AI chat system with real-time audio streaming capabilities.
-
-The system converts text to natural-sounding speech in real-time, enabling voice-based AI interactions. Users can have conversations with AI assistants through voice, with responses streamed as audio.
-
-Built for low latency and high reliability, the system handles multiple concurrent users while maintaining consistent performance.`
-      },
-      {
-        id: 'architecture',
-        label: 'Architecture',
-        content: `The system uses a hybrid cloud architecture:
-
-**Backend (Rust/Axum)**: Handles TTS generation, LLM inference, WebSocket connections. Built on Tokio async runtime for high concurrency.
-
-**Frontend (Vanilla JS)**: Zero-dependency implementation using Web Audio API for audio playback and visualization.
-
-**Deployment Strategy**:
-- Frontend on Vercel's Global CDN for <50ms load times
-- Backend on Railway with ~1.5GB embedded AI models
-- Dynamic URL injection for environment flexibility`
-      },
-      {
-        id: 'performance',
-        label: 'Performance',
-        content: `Performance optimizations achieved 40% latency reduction:
-
-**WebSocket Streaming**: Replaced REST polling with bidirectional WebSocket communication, eliminating request/response overhead.
-
-**Voice Activity Detection**: Client-side VAD detects when users stop speaking, enabling immediate response without waiting for silence timeout.
-
-**Rust Benefits**: Zero garbage collection pauses, predictable performance, excellent async handling with Tokio.
-
-**Result**: Consistent sub-millisecond server latency, enabling natural conversational flow.`
-      },
-      {
-        id: 'challenges',
-        label: 'Challenges',
-        content: `Key technical challenges solved:
-
-**Cross-Platform Deployment**: Developing on M-series Mac (ARM) but deploying to AMD64 servers. Solved with cross-compilation workflow for Docker images.
-
-**Model Embedding**: ~1.5GB of AI models needed to be containerized efficiently. Used multi-stage builds and layer caching.
-
-**Audio Streaming**: Real-time audio requires careful buffer management. Implemented streaming with proper chunking and client-side buffering.
-
-**Environment Flexibility**: Dynamic backend URL injection at build time allows deploying to different environments without code changes.`
-      }
-    ]
-  },
-  {
-    id: '4',
-    slug: 'equipment-management-system',
-    title: 'Equipment Management System',
-    shortDescription: 'Cloud-native equipment loan management with Spring Boot, featuring 60% Docker optimization and production-ready Kubernetes deployment.',
-    fullDescription: `A cloud-native equipment loan management system demonstrating the complete journey from application development to production Kubernetes deployment.
-
-The backend is a RESTful API built with Spring Boot serving 10+ endpoints for equipment inventory, user management, and loan tracking. Security is implemented with JWT authentication, BCrypt password hashing, and comprehensive CORS configuration.
-
-The application showcases container optimization techniques. Through multi-stage Docker builds, careful dependency management, and proper base image selection, the final image size was reduced by 60% (from 500MB to 200MB), significantly improving deployment times and resource usage.
-
-Kubernetes deployment includes:
-• Deployments with 3 replicas for high availability
-• Services for internal networking and load balancing
-• ConfigMaps and Secrets for configuration management
-• Persistent Volume Claims for MySQL data durability
-• Liveness and readiness probes for zero-downtime deployments
-• Resource limits and requests for cluster efficiency
-• Horizontal Pod Autoscaler configuration
-
-Container security best practices include non-root user execution, read-only root filesystem where possible, image vulnerability scanning, and proper secret management.
-
-Comprehensive documentation covers the entire deployment workflow: local development with Docker Compose, deployment to Minikube for testing, and guides for production deployment to AWS EKS or GCP GKE.`,
-    tags: [
-      'Java 17',
-      'Spring Boot',
-      'Spring Security',
-      'Spring Data JPA',
-      'MySQL',
-      'Docker',
-      'Kubernetes',
-      'NGINX',
-      'JWT',
-      'Maven',
-      'ConfigMaps',
-      'PVC'
-    ],
-    category: 'Full Stack',
-    imageUrl: '/images/projects/equipment-management-system/main.png',
-    images: [
-      '/images/projects/equipment-management-system/1.png',
-      '/images/projects/equipment-management-system/2.png'
-    ],
-    repoUrl: 'https://github.com/aminlahbib/Equipment-Managment-System',
-    demoUrl: '',
-    featured: true,
-    metrics: [
-      { label: 'Image Size', value: '-60%' },
-      { label: 'Endpoints', value: '10+' },
-      { label: 'K8s Replicas', value: '3' },
-      { label: 'Tables', value: '4' },
-      { label: 'Guides', value: '15+' }
-    ],
-    usedBy: [
-      'Multi-stage Docker builds for 60% size reduction',
-      'Kubernetes with HPA and health probes',
-      'JWT authentication with BCrypt',
-      'Production-ready for EKS/GKE deployment',
-      'Comprehensive deployment documentation'
-    ],
-    tabs: [
-      {
-        id: 'overview',
-        label: 'Overview',
-        content: `A cloud-native equipment loan management system for tracking equipment inventory, managing user access, and recording loan history.
-
-The platform enables organizations to manage their equipment assets efficiently, with features for checking equipment in/out, tracking loan history, and managing user permissions.
-
-Built with DevOps best practices, the system is designed for production Kubernetes deployment with high availability and scalability.`
-      },
-      {
-        id: 'architecture',
-        label: 'Architecture',
-        content: `The system follows a cloud-native architecture:
-
-**Backend**: Spring Boot REST API with 10+ endpoints for equipment, users, and loans.
-
-**Database**: MySQL with 4 normalized tables, managed via Spring Data JPA.
-
-**Authentication**: JWT-based with BCrypt password hashing, refresh tokens, and role-based access.
-
-**Frontend**: Vanilla JavaScript with responsive design for desktop and mobile.
-
-**Containerization**: Multi-stage Docker builds optimized for size and security.`
-      },
-      {
-        id: 'kubernetes',
-        label: 'Kubernetes',
-        content: `Production-ready Kubernetes deployment configuration:
-
-**Workloads**: Deployments with 3 replicas, rolling update strategy
-
-**Networking**: ClusterIP services, Ingress with TLS termination
-
-**Configuration**: ConfigMaps for app config, Secrets for credentials
-
-**Storage**: PersistentVolumeClaims for MySQL data durability
-
-**Scaling**: HorizontalPodAutoscaler based on CPU/memory
-
-**Health**: Liveness and readiness probes for zero-downtime
-
-**Security**: Non-root containers, resource limits, network policies`
-      },
-      {
-        id: 'optimization',
-        label: 'Optimization',
-        content: `Container optimization techniques achieving 60% size reduction:
-
-**Multi-stage Builds**: Separate build and runtime stages, only copying necessary artifacts.
-
-**Base Image Selection**: Using distroless or Alpine-based images for minimal footprint.
-
-**Dependency Management**: Careful analysis of dependencies, excluding test and development tools.
-
-**Layer Optimization**: Ordering Dockerfile instructions for maximum cache utilization.
-
-**Result**: Image reduced from 500MB to 200MB, faster pulls and deployments, reduced attack surface.`
       }
     ]
   }
