@@ -257,10 +257,12 @@ const Home: React.FC = () => {
             {featuredProjects.map((project, index) => (
         <motion.div 
                 key={project.id}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.25, delay: index * 0.05 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.3, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -2 }}
+                className="transition-transform duration-200"
               >
                 <ProjectCard project={project} variant="list" />
             </motion.div>
