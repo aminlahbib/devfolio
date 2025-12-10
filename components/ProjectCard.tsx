@@ -51,7 +51,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
           alt={project.title}
           loading="lazy"
           decoding="async"
-            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
         />
       </div>
       

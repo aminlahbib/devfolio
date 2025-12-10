@@ -103,7 +103,7 @@ const Projects: React.FC = () => {
       <motion.div
           initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.25 }}
         className="mb-12"
       >
           <h1 className="text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-white tracking-tight mb-4">
@@ -160,7 +160,7 @@ const Projects: React.FC = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.25, delay: 0.05 }}
           className="flex flex-col sm:flex-row sm:items-center gap-4 mb-10"
         >
           <div className="flex gap-1 overflow-x-auto pb-2 sm:pb-0">
@@ -203,7 +203,7 @@ const Projects: React.FC = () => {
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
+                transition={{ duration: 0.2, delay: index * 0.04 }}
               >
                 <ProjectCard project={project} variant="grid" />
               </motion.div>
@@ -234,7 +234,7 @@ const Projects: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0 }} 
           animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.25, delay: 0.15 }}
             className="mt-20 pt-12 border-t border-neutral-200 dark:border-neutral-800"
         >
             <h2 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-5">

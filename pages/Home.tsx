@@ -150,7 +150,7 @@ const Home: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.25 }}
           >
             <p className="text-caption text-neutral-500 dark:text-neutral-400 mb-6">
               {t('home.role')}
@@ -190,7 +190,7 @@ const Home: React.FC = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.25 }}
           >
             <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-16 text-center">
               {t('home.expertise')}
@@ -203,7 +203,7 @@ const Home: React.FC = () => {
                 const hasProjects = tagForTech !== null;
                 
                 const content = (
-                  <div className={`text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-200 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 flex items-center gap-2 ${hasProjects ? 'cursor-pointer' : 'cursor-default'}`}>
+                  <div className={`text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-150 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 flex items-center gap-2 ${hasProjects ? 'cursor-pointer' : 'cursor-default'}`}>
                     {TechIcon && (
                       <TechIcon size={16} className="text-neutral-400 dark:text-neutral-500 transition-colors group-hover:text-neutral-600 dark:group-hover:text-neutral-400 flex-shrink-0" />
                     )}
@@ -217,7 +217,7 @@ const Home: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.03 }}
+                    transition={{ duration: 0.2, delay: index * 0.015 }}
                     className="group"
                   >
                     {hasProjects ? (
@@ -260,7 +260,7 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.25, delay: index * 0.05 }}
               >
                 <ProjectCard project={project} variant="list" />
             </motion.div>

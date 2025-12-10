@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Github, ExternalLink, Check, ChevronLeft, ChevronRight, Play, Mail } from 'lucide-react';
@@ -14,6 +14,8 @@ const ProjectDetail: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const thumbnailContainerRef = useRef<HTMLDivElement>(null);
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -78,6 +80,46 @@ const ProjectDetail: React.FC = () => {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  // Keyboard navigation
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [images.length]);
+
+  // Scroll active thumbnail into view
+  useEffect(() => {
+    if (thumbnailRefs.current[currentImageIndex] && thumbnailContainerRef.current) {
+      const activeThumbnail = thumbnailRefs.current[currentImageIndex];
+      const container = thumbnailContainerRef.current;
+      
+      if (activeThumbnail) {
+        const containerRect = container.getBoundingClientRect();
+        const thumbnailRect = activeThumbnail.getBoundingClientRect();
+        
+        // Check if thumbnail is out of view
+        if (thumbnailRect.left < containerRect.left) {
+          // Scroll left to show thumbnail
+          activeThumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        } else if (thumbnailRect.right > containerRect.right) {
+          // Scroll right to show thumbnail
+          activeThumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' });
+        }
+      }
+    }
+  }, [currentImageIndex]);
+
   if (status === LoadStatus.LOADING) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -129,7 +171,7 @@ const ProjectDetail: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.25 }}
         >
             <span className="inline-block text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-4">
               {project.category}
@@ -179,100 +221,103 @@ const ProjectDetail: React.FC = () => {
           </div>
 
       {/* Image Gallery */}
-          <motion.div 
-        className="px-6 mb-20"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <div className="relative overflow-hidden rounded-2xl bg-transparent shadow-sm">
-            {/* Loading Skeleton */}
-            {!imageLoaded && (
-              <div className="absolute inset-0 w-full h-[400px] bg-neutral-100 dark:bg-neutral-900 rounded-2xl animate-pulse z-0" />
-            )}
-            
-            {/* Main Image */}
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={currentImageIndex}
-                src={images[currentImageIndex]}
-                alt={`${project.title} - Image ${currentImageIndex + 1}`}
-                className="w-full h-auto rounded-2xl relative z-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: imageLoaded ? 1 : 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                onLoad={() => setImageLoaded(true)}
-                loading="eager"
-              />
-            </AnimatePresence>
+      {images.length > 0 && (
+        <motion.div 
+          className="px-6 mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+        >
+          <div className="max-w-4xl mx-auto">
+            {/* Main Image Container */}
+            <div className="relative group">
+              {/* Loading Skeleton */}
+              {!imageLoaded && (
+                <div className="absolute inset-0 w-full aspect-video bg-neutral-100 dark:bg-neutral-900 rounded-xl animate-pulse z-0" />
+              )}
+              
+              {/* Main Image */}
+              <div className="relative overflow-hidden rounded-xl bg-neutral-50 dark:bg-neutral-900">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentImageIndex}
+                    src={images[currentImageIndex]}
+                    alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                    className="w-full h-auto rounded-xl relative z-10"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: imageLoaded ? 1 : 0, scale: imageLoaded ? 1 : 0.98 }}
+                    exit={{ opacity: 0, scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                    onLoad={() => setImageLoaded(true)}
+                    loading="eager"
+                  />
+                </AnimatePresence>
 
-            {/* Navigation Arrows */}
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 dark:bg-neutral-900/90 text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 transition-colors shadow-lg"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 dark:bg-neutral-900/90 text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 transition-colors shadow-lg"
-                  aria-label="Next image"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </>
-            )}
+                {/* Navigation Arrows - More Visible */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2.5 md:p-3 rounded-full bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 active:scale-95 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-neutral-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 z-20"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft size={20} className="md:w-6 md:h-6" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2.5 md:p-3 rounded-full bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 active:scale-95 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-neutral-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 z-20"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight size={20} className="md:w-6 md:h-6" />
+                    </button>
+                  </>
+                )}
 
-            {/* Image Indicators */}
+                {/* Image Counter */}
+                {images.length > 1 && (
+                  <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/60 dark:bg-white/60 backdrop-blur-sm text-white dark:text-neutral-900 text-xs font-medium z-20">
+                    {currentImageIndex + 1} / {images.length}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Thumbnail Navigation - Below Main Image */}
             {images.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {images.map((_, index) => (
+              <div 
+                ref={thumbnailContainerRef}
+                className="flex gap-2.5 mt-5 overflow-x-auto py-2 px-2 scrollbar-hide"
+              >
+                {images.map((img, index) => (
                   <button
                     key={index}
+                    ref={(el) => {
+                      thumbnailRefs.current[index] = el;
+                    }}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
+                    className={`flex-shrink-0 w-20 h-14 rounded-lg transition-all duration-200 relative p-[1px] ${
                       index === currentImageIndex
-                        ? 'bg-white w-6'
-                        : 'bg-white/50 hover:bg-white/75'
+                        ? 'bg-neutral-900 dark:bg-white scale-105'
+                        : 'bg-transparent opacity-50 hover:opacity-75 hover:bg-neutral-300 dark:hover:bg-neutral-700'
                     }`}
-                    aria-label={`Go to image ${index + 1}`}
-                  />
+                    aria-label={`View image ${index + 1}`}
+                  >
+                    <div className="w-full h-full rounded-lg overflow-hidden">
+                      <img
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  </button>
                 ))}
               </div>
             )}
           </div>
-
-          {/* Thumbnail Strip */}
-          {images.length > 1 && (
-            <div className="flex gap-2 mt-4 overflow-x-auto py-3 px-2">
-              {images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentImageIndex(index)}
-                  className={`flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden transition-all ${
-                    index === currentImageIndex
-                      ? 'ring-2 ring-neutral-900 dark:ring-white ring-offset-2 ring-offset-white dark:ring-offset-neutral-950'
-                      : 'opacity-60 hover:opacity-100'
-                  }`}
-                >
-                  <img
-                    src={img}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-          </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Metrics Grid */}
       {project.metrics && project.metrics.length > 0 && (
@@ -280,7 +325,7 @@ const ProjectDetail: React.FC = () => {
           className="px-6 mb-20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
         >
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-10 border-y border-neutral-200 dark:border-neutral-800">
@@ -308,7 +353,7 @@ const ProjectDetail: React.FC = () => {
               className="lg:col-span-2"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.3, delay: 0.15 }}
             >
               {/* Tabs */}
               {project.tabs && project.tabs.length > 0 ? (
@@ -329,7 +374,7 @@ const ProjectDetail: React.FC = () => {
                           <motion.div
                             layoutId="activeTab"
                             className="absolute bottom-0 left-0 right-0 h-0.5 bg-neutral-900 dark:bg-white"
-                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.3 }}
                           />
                         )}
                       </button>
@@ -343,7 +388,7 @@ const ProjectDetail: React.FC = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.15 }}
                       className="prose prose-neutral dark:prose-invert max-w-none"
                     >
                       {activeTabContent?.content.split('\n\n').map((paragraph, i) => {
@@ -393,7 +438,7 @@ const ProjectDetail: React.FC = () => {
               className="lg:col-span-1 space-y-10"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
             >
               {/* Key Highlights */}
               {project.usedBy && project.usedBy.length > 0 && (
@@ -443,7 +488,7 @@ const ProjectDetail: React.FC = () => {
         className="px-6 mt-24"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
+        transition={{ duration: 0.3, delay: 0.25 }}
       >
         <div className="max-w-4xl mx-auto py-12 border-t border-neutral-200 dark:border-neutral-800">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
