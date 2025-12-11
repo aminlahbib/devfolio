@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, FileStack } from 'lucide-react';
-import { 
-  SiReact, SiTypescript, SiTailwindcss, SiSpring, SiRust, SiNodedotjs, 
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import {
+  SiReact, SiTypescript, SiTailwindcss, SiSpring, SiRust,
   SiKubernetes, SiDocker, SiTerraform, SiPostgresql, SiRedis, SiMysql,
-  SiGooglecloud, SiFirebase, SiGrafana, SiPrometheus, SiGit, SiGithub, 
-  SiGitlab, SiLinux, SiApachemaven, SiPython
+  SiGooglecloud, SiFirebase, SiGrafana, SiPrometheus, SiGit,
+  SiLinux, SiApachemaven
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
 import { projectService } from '../services/api';
@@ -96,9 +96,7 @@ const Home: React.FC = () => {
     // Backend
     'Spring Boot': SiSpring,
     'Rust': SiRust,
-    'Node.js': SiNodedotjs,
     'Java': FaJava,
-    'Python': SiPython,
     'Maven': SiApachemaven,
     // Infrastructure
     'Kubernetes': SiKubernetes,
@@ -108,12 +106,9 @@ const Home: React.FC = () => {
     'Google Cloud': SiGooglecloud,
     'Firebase': SiFirebase,
     'Grafana': SiGrafana,
-    'Loki': FileStack, // Using FileStack icon for Loki (logging tool)
     'Prometheus': SiPrometheus,
     // Version Control & Tools
     'Git': SiGit,
-    'GitHub': SiGithub,
-    'GitLab': SiGitlab,
     'Linux': SiLinux,
     // Data
     'PostgreSQL': SiPostgresql,
@@ -121,19 +116,31 @@ const Home: React.FC = () => {
     'MySQL': SiMysql,
   };
 
-  const technologies = [
-    // Frontend
-    'React', 'TypeScript', 'Tailwind CSS',
-    // Backend
-    'Java', 'Spring Boot', 'Python', 'Rust', 'Node.js', 'Maven',
-    // Infrastructure & Cloud
-    'Kubernetes', 'Docker', 'Terraform', 'Google Cloud', 'Firebase',
-    // Observability
-    'Grafana', 'Loki', 'Prometheus',
-    // Version Control & Tools
-    'Git', 'GitHub', 'GitLab', 'Linux',
-    // Data
-    'PostgreSQL', 'Redis', 'MySQL',
+  const expertiseCategories = [
+    {
+      name: 'cloud',
+      technologies: ['Google Cloud', 'Firebase'],
+    },
+    {
+      name: 'orchestration',
+      technologies: ['Kubernetes', 'Docker', 'Terraform'],
+    },
+    {
+      name: 'observability',
+      technologies: ['Grafana', 'Prometheus'],
+    },
+    {
+      name: 'backend',
+      technologies: ['Java', 'Spring Boot', 'Rust', 'Maven'],
+    },
+    {
+      name: 'frontend',
+      technologies: ['React', 'TypeScript', 'Tailwind CSS'],
+    },
+    {
+      name: 'data',
+      technologies: ['PostgreSQL', 'Redis', 'MySQL'],
+    },
   ];
 
   return (
@@ -186,55 +193,79 @@ const Home: React.FC = () => {
       {/* Expertise */}
       <section className="py-32 px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-5xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.25 }}
-          >
-            <h2 className="text-small text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-16 text-center">
-              {t('home.expertise')}
-            </h2>
-            
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-              {technologies.map((tech, index) => {
-                const TechIcon = technologyIcons[tech];
-                const tagForTech = getTagForTechnology(tech, allProjects);
-                const hasProjects = tagForTech !== null;
-                
-                const content = (
-                  <div className={`text-caption text-neutral-500 dark:text-neutral-400 transition-all duration-150 hover:text-neutral-900 dark:hover:text-white hover:translate-x-1 flex items-center gap-2 ${hasProjects ? 'cursor-pointer' : 'cursor-default'}`}>
-                    {TechIcon && (
-                      <TechIcon size={16} className="text-neutral-400 dark:text-neutral-500 transition-colors group-hover:text-neutral-600 dark:group-hover:text-neutral-400 flex-shrink-0" />
-                    )}
-                    <span>{tech}</span>
-                  </div>
-                );
-                
-                return (
-                  <motion.div
-                    key={tech}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.2, delay: index * 0.015 }}
-                    className="group"
-                  >
-                    {hasProjects ? (
-                      <Link
-                        to={`/projects?tag=${encodeURIComponent(tagForTech)}`}
-                        className="block"
-                      >
-                        {content}
-                      </Link>
-                    ) : (
-                      content
-                    )}
-                  </motion.div>
-                );
-              })}
+          <div className="flex flex-col md:flex-row gap-8 md:gap-16">
+            {/* Title Sidebar */}
+            <div className="md:w-32 flex-shrink-0">
+              <div className="font-mono text-caption text-neutral-500 dark:text-neutral-400 leading-tight">
+                <div>(001)</div>
+                <div className="uppercase tracking-wider mt-0.5">EXPERTISE</div>
+              </div>
             </div>
-          </motion.div>
+            
+            {/* Content */}
+            <div className="flex-1">
+              <div className="space-y-px">
+                {expertiseCategories.map((category, categoryIndex) => (
+                  <motion.div
+                    key={category.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.3, delay: categoryIndex * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    className="py-4 border-b border-neutral-200 dark:border-neutral-800 last:border-b-0"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-12">
+                      <div className="md:w-28 flex-shrink-0">
+                        <h3 className="text-caption text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+                          {t(`home.expertise.${category.name}`)}
+                        </h3>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex flex-wrap gap-x-6 gap-y-2">
+                          {category.technologies.map((tech) => {
+                            const TechIcon = technologyIcons[tech];
+                            const tagForTech = getTagForTechnology(tech, allProjects);
+                            const hasProjects = tagForTech !== null;
+                            
+                            const content = (
+                              <div className={`inline-flex items-center gap-2 text-body text-neutral-600 dark:text-neutral-400 transition-colors duration-200 ${
+                                hasProjects 
+                                  ? 'hover:text-neutral-900 dark:hover:text-white cursor-pointer' 
+                                  : 'cursor-default'
+                              }`}>
+                                {TechIcon && (
+                                  <TechIcon 
+                                    size={16} 
+                                    className="text-neutral-400 dark:text-neutral-500 transition-colors flex-shrink-0" 
+                                  />
+                                )}
+                                <span>{tech}</span>
+                              </div>
+                            );
+                            
+                            return (
+                              <div key={tech}>
+                                {hasProjects ? (
+                                  <Link
+                                    to={`/projects?tag=${encodeURIComponent(tagForTech)}`}
+                                    className="block"
+                                  >
+                                    {content}
+                                  </Link>
+                                ) : (
+                                  content
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
