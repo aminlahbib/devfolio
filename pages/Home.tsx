@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, FileStack } from 'lucide-react';
-import { 
-  SiReact, SiTypescript, SiTailwindcss, SiSpring, SiRust, SiNodedotjs, 
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import {
+  SiReact, SiTypescript, SiTailwindcss, SiSpring, SiRust,
   SiKubernetes, SiDocker, SiTerraform, SiPostgresql, SiRedis, SiMysql,
-  SiGooglecloud, SiFirebase, SiGrafana, SiPrometheus, SiGit, SiGithub, 
-  SiGitlab, SiLinux, SiApachemaven, SiPython
+  SiGooglecloud, SiFirebase, SiGrafana, SiPrometheus, SiGit,
+  SiLinux, SiApachemaven
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
 import { projectService } from '../services/api';
@@ -96,9 +96,7 @@ const Home: React.FC = () => {
     // Backend
     'Spring Boot': SiSpring,
     'Rust': SiRust,
-    'Node.js': SiNodedotjs,
     'Java': FaJava,
-    'Python': SiPython,
     'Maven': SiApachemaven,
     // Infrastructure
     'Kubernetes': SiKubernetes,
@@ -108,12 +106,9 @@ const Home: React.FC = () => {
     'Google Cloud': SiGooglecloud,
     'Firebase': SiFirebase,
     'Grafana': SiGrafana,
-    'Loki': FileStack, // Using FileStack icon for Loki (logging tool)
     'Prometheus': SiPrometheus,
     // Version Control & Tools
     'Git': SiGit,
-    'GitHub': SiGithub,
-    'GitLab': SiGitlab,
     'Linux': SiLinux,
     // Data
     'PostgreSQL': SiPostgresql,
@@ -125,13 +120,13 @@ const Home: React.FC = () => {
     // Frontend
     'React', 'TypeScript', 'Tailwind CSS',
     // Backend
-    'Java', 'Spring Boot', 'Python', 'Rust', 'Node.js', 'Maven',
+    'Java', 'Spring Boot', 'Rust', 'Maven',
     // Infrastructure & Cloud
     'Kubernetes', 'Docker', 'Terraform', 'Google Cloud', 'Firebase',
     // Observability
-    'Grafana', 'Loki', 'Prometheus',
+    'Grafana', 'Prometheus',
     // Version Control & Tools
-    'Git', 'GitHub', 'GitLab', 'Linux',
+    'Git', 'Linux',
     // Data
     'PostgreSQL', 'Redis', 'MySQL',
   ];
