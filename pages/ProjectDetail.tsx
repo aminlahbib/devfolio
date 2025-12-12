@@ -327,14 +327,14 @@ const ProjectDetail: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
         >
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-10 border-y border-neutral-200 dark:border-neutral-800">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-around py-10 md:py-12 border-y border-neutral-200 dark:border-neutral-800">
               {project.metrics.map((metric, i) => (
-                <div key={i} className="text-center">
-                  <p className="text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white mb-1">
+                <div key={i} className="flex flex-col items-center text-center">
+                  <p className="text-base md:text-lg lg:text-xl font-semibold text-neutral-900 dark:text-white mb-1.5 leading-tight">
                     {metric.value}
                   </p>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                  <p className="text-[10px] md:text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider leading-tight">
                     {metric.label}
                   </p>
                 </div>

@@ -88,12 +88,12 @@ Infrastructure is fully codified using Terraform for GCP resources (GKE, Cloud S
     demoUrl: '',
     featured: true,
     metrics: [
-      { label: 'Production Score', value: '7.2/10' },
       { label: 'Test Coverage', value: '80%+' },
-      { label: 'Documentation', value: '17K lines' },
-      { label: 'Services', value: '3' },
-      { label: 'Cost Saved', value: '31%' },
-      { label: 'Security Score', value: '8.0/10' }
+      { label: 'Microservices', value: '3 Services' },
+      { label: 'Security', value: 'Enterprise-Grade' },
+      { label: 'Infrastructure', value: '100% IaC' },
+      { label: 'Observability', value: 'Full Stack' },
+      { label: 'Tech Stack', value: '15+ Technologies' }
     ],
     usedBy: [
       'AES-256-GCM encryption with key rotation',
