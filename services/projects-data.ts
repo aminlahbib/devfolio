@@ -85,7 +85,7 @@ Infrastructure is fully codified using Terraform for GCP resources (GKE, Cloud S
       '/images/projects/cloud-secrets-manager/41.png'
     ],
     repoUrl: 'https://github.com/aminlahbib/Cloud-Secrets-Manager',
-    demoUrl: '',
+    demoUrl: 'https://frontend-1040913502384.europe-west10.run.app',
     featured: true,
     metrics: [
       { label: 'Test Coverage', value: '80%+' },
