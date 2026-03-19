@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, Github, ExternalLink, FileText } from 'lucide-react';
 import { Project } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -118,7 +118,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
       </Link>
       
       {/* External Links */}
-      {(project.repoUrl || project.demoUrl) && (
+      {(project.repoUrl || project.demoUrl || project.reportUrl) && (
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-900">
             {project.repoUrl && (
             <a 
@@ -142,6 +142,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'grid' }) 
             >
               <ExternalLink size={14} />
               <span>{t('projectCard.demo')}</span>
+            </a>
+          )}
+            {project.reportUrl && (
+            <a 
+              href={project.reportUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+            >
+              <FileText size={14} />
+              <span>{t('projectCard.report')}</span>
             </a>
           )}
         </div>

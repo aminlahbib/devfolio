@@ -74,5 +74,7 @@
   "footer.role": "Full Stack Engineer",
   
   "projectCard.source": "Source",
-  "projectCard.demo": "Demo"
+  "projectCard.demo": "Demo",
+  "projectCard.report": "Report",
+  "projectDetail.viewReport": "View Project Report"
 }
