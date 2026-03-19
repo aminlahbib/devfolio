@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Check, ChevronLeft, ChevronRight, Play, Mail } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, Check, ChevronLeft, ChevronRight, Play, Mail, FileText } from 'lucide-react';
 import { projectService } from '../services/api';
 import { Project, LoadStatus } from '../types';
 import SEO from '../components/SEO';
@@ -205,6 +205,17 @@ const ProjectDetail: React.FC = () => {
                 >
                   <ExternalLink size={18} />
                   {t('projectDetail.liveDemo')}
+                </a>
+              )}
+              {project.reportUrl && (
+                <a 
+                  href={project.reportUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
+                >
+                  <FileText size={18} />
+                  {t('projectDetail.viewReport')}
                 </a>
               )}
               <Link
