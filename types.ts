@@ -16,6 +16,7 @@ export interface Project {
   images?: string[]; // Multiple images for gallery
   repoUrl?: string;
   demoUrl?: string;
+  reportUrl?: string;
   featured: boolean;
   metrics?: {
     label: string;

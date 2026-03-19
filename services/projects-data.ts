@@ -317,7 +317,8 @@ The frontend is intentionally built with vanilla JavaScript (ES6+) and Web Audio
       '/images/projects/real-time-ai-tts-system/5.png'
     ],
     repoUrl: 'https://github.com/aminlahbib/TTS-Project',
-    demoUrl: 'https://tts-project-two.vercel.app', 
+    demoUrl: '',
+    reportUrl: '/_SP__TTS_Bericht_GE.pdf',
     featured: true,
     metrics: [
       { label: 'Latency', value: 'Sub-ms' },
